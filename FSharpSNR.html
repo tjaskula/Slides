@@ -142,6 +142,12 @@
 
 </section>
 
+<section >
+
+<p>Can we measure the part of <strong>business value</strong> inside our code ?</p>
+
+</section>
+
 </section>
 
 <section >
@@ -159,7 +165,18 @@
 <p><span class="math">\(\mathrm{SNR} = \frac{\mu_\mathrm{sig}}{\sigma_\mathrm{bg}}\)</span></p>
 
 <aside class="notes">
-    Signal-to-noise ratio is sometimes used informally to refer to the ratio of useful information to false or irrelevant data in a conversation or exchange. For example, in online discussion forums and other online communities, off-topic posts and spam are regarded as "noise" that interferes with the "signal" of appropriate discussion.
+    Signal to noise ratio is a measurement of the audio signal level compared to the noise level present in the signal. SNR specifications are used in components such as amplifiers, CD/DVD players etc.,
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="i">Signal</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="i">noise</span> <span class="i">ratio</span> <span class="i">is</span> <span class="i">sometimes</span> <span class="i">used</span> <span class="i">informally</span> <span class="k">to</span> <span class="i">refer</span> <span class="k">to</span> <span class="i">the</span> <span class="i">ratio</span> <span class="k">of</span> <span class="i">useful</span> <span class="i">information</span> <span class="k">to</span> <span class="k">false</span> <span class="k">or</span> <span class="i">irrelevant</span> <span class="i">data</span> <span class="k">in</span> <span class="i">a</span> <span class="i">conversation</span> <span class="k">or</span> <span class="i">exchange</span><span class="o">.</span> <span class="i">For</span> <span class="i">example</span>, <span class="k">in</span> <span class="i">online</span> <span class="i">discussion</span> <span class="i">forums</span> <span class="k">and</span> <span class="i">other</span> <span class="i">online</span> <span class="i">communities</span>, <span class="i">off</span><span class="o">-</span><span class="i">topic</span> <span class="i">posts</span> <span class="k">and</span> <span class="i">spam</span> <span class="i">are</span> <span class="i">regarded</span> <span class="k">as</span> <span class="s">&quot;</span><span class="s">noise</span><span class="s">&quot;</span> <span class="i">that</span> <span class="i">interferes</span> <span class="k">with</span> <span class="i">the</span> <span class="s">&quot;</span><span class="s">signal</span><span class="s">&quot;</span> <span class="k">of</span> <span class="i">appropriate</span> <span class="i">discussion</span><span class="o">.</span></pre>
+</td>
+</tr>
+</table>
+
 </aside>
 
 </section>
@@ -198,17 +215,48 @@
 
 </section>
 
+<section >
+
+<h3>Noise</h3>
+
+<blockquote>
+  <p>"Everything which infers with a signal and not contribute to the business value"</p>
+</blockquote>
+
+</section>
+
+<section >
+
+<h3>Noise properties</h3>
+
+<ul>
+<li>Irrelevant or false data</li>
+<li>Data mutation</li>
+<li>Transformation data with no added value</li>
+<li>Everything that hinders readability of Information</li>
+</ul>
+
+</section>
+
 </section>
 
 <section >
 
 <section >
 
-<h3>Lessons learnt</h3>
+<h3>Categories of code noises</h3>
 
 <ul>
-<li>Delivering value is hard</li>
-<li>Delivering value "on time" is even harder</li>
+<li>Organisation</li>
+<li>Readability</li>
+<li>Correctness</li>
+<li>Expressiveness
+<ul>
+<li>plumbing code</li>
+</ul></li>
+<li>Frameworks</li>
+<li>Effort</li>
+<li>Complexity</li>
 </ul>
 
 </section>
