@@ -52,6 +52,8 @@
 
 <p><a href="http://jaskula.fr">jaskula.fr</a></p>
 
+<p><img src="images/ComposeGreen1.jpg" alt="alt text" title="Compose IT logo" /></p>
+
 </section>
 
 </section>
@@ -69,8 +71,9 @@
 <ul>
 <li><a href="http://www.meetup.com/Functional-Programming-in-F/">F# user group</a></li>
 <li><a href="http://www.meetup.com/DDD-Paris/">Domain Driven Design user group</a></li>
-<li>playing guitar...</li>
 </ul></li>
+<li>twitting <a href="http://twitter.com/tjaskula">@tjaskula</a> and blogging occasionally at <a href="http://jaskula.fr">jaskula.fr</a></li>
+<li>playing guitar...</li>
 </ul>
 
 </section>
@@ -84,6 +87,32 @@
 <h3>This talk is about</h3>
 
 <p><strong>Benefits</strong> of moving from OOP to FP for a startup project</p>
+
+<aside class="notes">
+    I'm not an expert in FP.
+    If you're a FP expert so this may learn you nothing. If some people leave I won't be offended.
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<p>I've been always an OOP developer</p>
+
+<p>but...</p>
+
+</section>
+
+<section >
+
+<blockquote>
+  <p>The snake which cannot cast its skin has to die. As well the minds which are prevented from changing their opinions; they cease to be mind.
+<strong>Friedrich Nietzsche</strong></p>
+</blockquote>
 
 </section>
 
@@ -146,6 +175,10 @@
 
 <p>Can we measure the part of <strong>business value</strong> inside our code ?</p>
 
+<aside class="notes">
+    There is no an automatic tool or metric that can be used.
+</aside>
+
 </section>
 
 </section>
@@ -165,13 +198,42 @@
 <p><span class="math">\(\mathrm{SNR} = \frac{\mu_\mathrm{sig}}{\sigma_\mathrm{bg}}\)</span></p>
 
 <aside class="notes">
-    Signal to noise ratio is a measurement of the audio signal level compared to the noise level present in the signal. SNR specifications are used in components such as amplifiers, CD/DVD players etc.,
+    Mean (μ)    = ∑ X / n
+    = (50+30+20+35+25) / 5
+    = 160 / 5
+    = 32
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l">1: </span>
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
+<span class="i">Standard</span> <span class="i">Deviation</span> (<span class="i">σ</span>)  <span class="o">=</span> 
+<span class="o">=</span> 
+<span class="o">=</span> 
+<span class="o">=</span> 
+<span class="o">=</span> 
+<span class="o">=</span> <span class="n">11.51086</span>
+
+<span class="i">SNR</span> <span class="o">=</span> <span class="i">μ</span> <span class="o">/</span> <span class="i">σ</span>
+<span class="o">=</span> <span class="n">32</span> <span class="o">/</span> <span class="n">11.51086</span>
+<span class="o">=</span> <span class="n">2.7799834243488326</span>
+
+<span class="i">Signal</span> <span class="k">to</span> <span class="i">noise</span> <span class="i">ratio</span> <span class="i">is</span> <span class="i">a</span> <span class="i">measurement</span> <span class="k">of</span> <span class="i">the</span> <span class="i">audio</span> <span class="i">signal</span> <span class="i">level</span> <span class="i">compared</span> <span class="k">to</span> <span class="i">the</span> <span class="i">noise</span> <span class="i">level</span> <span class="i">present</span> <span class="k">in</span> <span class="i">the</span> <span class="i">signal</span><span class="o">.</span> <span class="i">SNR</span> <span class="i">specifications</span> <span class="i">are</span> <span class="i">used</span> <span class="k">in</span> <span class="i">components</span> <span class="i">such</span> <span class="k">as</span> <span class="i">amplifiers</span>, <span class="i">CD</span><span class="o">/</span><span class="i">DVD</span> <span class="i">players</span> <span class="i">etc</span><span class="o">.</span>,
+
 <span class="i">Signal</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="i">noise</span> <span class="i">ratio</span> <span class="i">is</span> <span class="i">sometimes</span> <span class="i">used</span> <span class="i">informally</span> <span class="k">to</span> <span class="i">refer</span> <span class="k">to</span> <span class="i">the</span> <span class="i">ratio</span> <span class="k">of</span> <span class="i">useful</span> <span class="i">information</span> <span class="k">to</span> <span class="k">false</span> <span class="k">or</span> <span class="i">irrelevant</span> <span class="i">data</span> <span class="k">in</span> <span class="i">a</span> <span class="i">conversation</span> <span class="k">or</span> <span class="i">exchange</span><span class="o">.</span> <span class="i">For</span> <span class="i">example</span>, <span class="k">in</span> <span class="i">online</span> <span class="i">discussion</span> <span class="i">forums</span> <span class="k">and</span> <span class="i">other</span> <span class="i">online</span> <span class="i">communities</span>, <span class="i">off</span><span class="o">-</span><span class="i">topic</span> <span class="i">posts</span> <span class="k">and</span> <span class="i">spam</span> <span class="i">are</span> <span class="i">regarded</span> <span class="k">as</span> <span class="s">&quot;</span><span class="s">noise</span><span class="s">&quot;</span> <span class="i">that</span> <span class="i">interferes</span> <span class="k">with</span> <span class="i">the</span> <span class="s">&quot;</span><span class="s">signal</span><span class="s">&quot;</span> <span class="k">of</span> <span class="i">appropriate</span> <span class="i">discussion</span><span class="o">.</span></pre>
 </td>
 </tr>
@@ -210,7 +272,8 @@
 
 <aside class="notes">
     What is Fact ? it's not a place (like in OOP language) but rather a value Fact = something that happend, that existed, incorporate time
-    Knowledge is derived from facts, comparing facts from different time points all the time
+    Knowledge is derived from facts, comparing facts from different time points all the time.
+    If mutable in a time a needs to be protected (OOP) (lock?)
 </aside>
 
 </section>
@@ -247,17 +310,199 @@
 <h3>Categories of code noises</h3>
 
 <ul>
-<li>Organisation</li>
+<li>Organization</li>
 <li>Readability</li>
 <li>Correctness</li>
-<li>Expressiveness
-<ul>
-<li>plumbing code</li>
-</ul></li>
+<li>Expressiveness</li>
 <li>Frameworks</li>
 <li>Effort</li>
 <li>Complexity</li>
 </ul>
+
+<aside class="notes">
+    Organization : how the code is structured
+    Readability : how it is easy to read the code. Most of the time we are reading to understand the code
+    Correctness : modeling with types, null reference exceptions, no side effects
+    Expressiveness : how much plumbing code, curly braces punctuations, powerfull type inference
+    Frameworks : how many frameworks for DI, AOP, ORMS
+    Effort : how difficult is to write code, know design patterns etc.
+    Complexity : cyclic dependencies, LoC, Cyclomatic Complexity
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Let's create a REST service</h3>
+
+<h4>Registration process business rules:</h4>
+
+<ul>
+<li>All fields are required (email, password, privacy selection, provider)</li>
+<li>Password should match the password policy</li>
+<li>Email address should be unique</li>
+<li>If user from trusted provider then email is automaticaly confirmed</li>
+<li>If not, an activation code should be created and sent to the user's email address</li>
+<li>Account is created and password is crypted</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Naive OOP implementation Page 1</h3>
+
+<table class="pre"><tr><td><pre lang="csharp">[HttpPost]
+[Route(<span class="s">"api/register"</span>)]
+<span class="k">public</span> IHttpActionResult Register(RegisterRepresentation rep)
+{
+    <span class="k">var</span> confirmationUrl <span class="o">=</span> <span class="k">new</span> Uri(Request.RequestUri, <span class="s">"/confirmation"</span>);
+
+    <span class="k">if</span> (ModelState.IsValid)
+    {
+        <span class="k">if</span> (!Regex.IsMatch(rep.Password,
+            <span class="s">@"(?!.*\s)[0-9a-zA-Z!@#\\$%*()_+^&amp;amp;}{:;?.]*$"</span>))
+        {
+            ModelState.AddModelError(<span class="s">"password"</span>, <span class="s">"The password 
+                                                does not match the policy"</span>);
+            <span class="k">return</span> BadRequest(ModelState);
+        }
+
+        IHttpActionResult response <span class="o">=</span> Ok(); </pre></td></tr></table>
+
+</section>
+
+<section >
+
+<h3>Naive OOP implementation Page 2</h3>
+
+<table class="pre"><tr><td><pre lang="csharp"><span class="k">using</span> (<span class="k">var</span> ctx <span class="o">=</span> <span class="k">new</span> RegistrationContext())
+{
+    <span class="k">if</span> (ctx.Accounts.Any(a <span class="o">=</span><span class="o">&gt;</span> a.Email <span class="o">=</span><span class="o">=</span> rep.Email))
+        <span class="k">return</span> Conflict();
+
+    <span class="k">var</span> cryptographer <span class="o">=</span> <span class="k">new</span> Cryptographer();
+    <span class="k">string</span> cryptedPassword <span class="o">=</span> cryptographer.GetPasswordHash(
+        rep.Password, cryptographer.CreateSalt());
+
+    <span class="k">var</span> account <span class="o">=</span> <span class="k">new</span> Account
+    {
+        Email <span class="o">=</span> rep.Email,
+        Password <span class="o">=</span> cryptedPassword,
+        Provider <span class="o">=</span> rep.Provider
+    };
+
+    <span class="k">if</span> (account.Provider <span class="o">=</span><span class="o">=</span> <span class="s">"OAuth"</span>)
+    {
+        account.IsEmailConfirmed <span class="o">=</span> <span class="k">true</span>;
+        account.ConfirmEmail(DateTime.Now);
+    }</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<h3>Naive OOP implementation Page 3</h3>
+
+<table class="pre"><tr><td><pre lang="csharp"><span class="k">if</span> (!account.IsEmailConfirmed)
+    {
+        account.SetActivationCode(Guid.NewGuid(), DateTime.Now.AddDays(5));
+        <span class="k">var</span> notifier <span class="o">=</span> <span class="k">new</span> Notifier();
+        notifier.SendActivationNotification(account.Email);
+
+        response <span class="o">=</span> Created(confirmationUrl, <span class="k">new</span> ConfirmationRepresentation
+        {
+            Email <span class="o">=</span> account.Email,
+            Code <span class="o">=</span> account.ActivationCode,
+            ExpirationTime <span class="o">=</span> account.ActivationCodeExpirationTime.Value
+        });
+    }
+    ctx.Accounts.Add(account);
+    ctx.SaveChanges();
+
+    <span class="k">return</span> response;
+    }
+  }
+<span class="k">return</span> BadRequest(ModelState);
+}</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Let's create a REST service</h3>
+
+<h4>Turned bad...</h4>
+
+<h5>very bad...</h5>
+
+<p><img src="images/turnedBad.jpg" alt="alt text" title="OOP red flags" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Like many things in life after all</h3>
+
+</section>
+
+<section >
+
+<h3>Let's saw this board</h3>
+
+<p><img src="images/BadSaw.jpg" alt="alt text" title="Let's saw this board" /></p>
+
+</section>
+
+<section >
+
+<h3>Let's install this air conditioner</h3>
+
+<p><img src="images/BadAirCond.jpg" alt="alt text" title="Let's install this air conditioner" /></p>
+
+</section>
+
+<section >
+
+<h3>Let's get this party started!</h3>
+
+<p><img src="images/BadPoolMix.jpg" alt="alt text" title="Let's install this air conditioner" /></p>
+
+</section>
+
+<section >
+
+<h3>And finally</h3>
+
+<h4>Let's get some liquor and guns, but without leaving our vehicle</h4>
+
+<p><img src="images/Badshoot.jpg" alt="alt text" title="Let's get some liquor and guns, but without leaving our vehicle" /></p>
+
+</section>
+
+<section >
+
+<h3>Murphy's law</h3>
+
+<blockquote>
+  <p>Anything that can go wrong, will go wrong.</p>
+</blockquote>
 
 </section>
 
