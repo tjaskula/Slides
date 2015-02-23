@@ -36,7 +36,18 @@
 </head>
 <body>
     <div class="reveal">
-        
+        <div class="tip" id="fs1">Multiple items<br />val Failure : message:string -&gt; exn<br /><br />Full name: Microsoft.FSharp.Core.Operators.Failure<br /><br />--------------------<br />active recognizer Failure: exn -&gt; string option<br /><br />Full name: Microsoft.FSharp.Core.Operators.( |Failure|_| )</div>
+<div class="tip" id="fs2">Multiple items<br />val string : value:&#39;T -&gt; string<br /><br />Full name: Microsoft.FSharp.Core.Operators.string<br /><br />--------------------<br />type string = System.String<br /><br />Full name: Microsoft.FSharp.Core.string</div>
+<div class="tip" id="fs3">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs4">Multiple items<br />module List<br /><br />from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =<br />&#160;&#160;| ( [] )<br />&#160;&#160;| ( :: ) of Head: &#39;T * Tail: &#39;T list<br />&#160;&#160;interface IEnumerable<br />&#160;&#160;interface IEnumerable&lt;&#39;T&gt;<br />&#160;&#160;member Head : &#39;T<br />&#160;&#160;member IsEmpty : bool<br />&#160;&#160;member Item : index:int -&gt; &#39;T with get<br />&#160;&#160;member Length : int<br />&#160;&#160;member Tail : &#39;T list<br />&#160;&#160;static member Cons : head:&#39;T * tail:&#39;T list -&gt; &#39;T list<br />&#160;&#160;static member Empty : &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List&lt;_&gt;</div>
+<div class="tip" id="fs5">val tail : list:&#39;T list -&gt; &#39;T list<br /><br />Full name: Microsoft.FSharp.Collections.List.tail</div>
+<div class="tip" id="fs6">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="tip" id="fs7">Multiple items<br />type NoEqualityAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; NoEqualityAttribute<br /><br />Full name: Microsoft.FSharp.Core.NoEqualityAttribute<br /><br />--------------------<br />new : unit -&gt; NoEqualityAttribute</div>
+<div class="tip" id="fs8">Multiple items<br />type NoComparisonAttribute =<br />&#160;&#160;inherit Attribute<br />&#160;&#160;new : unit -&gt; NoComparisonAttribute<br /><br />Full name: Microsoft.FSharp.Core.NoComparisonAttribute<br /><br />--------------------<br />new : unit -&gt; NoComparisonAttribute</div>
+<div class="tip" id="fs9">type &#39;T option = Option&lt;&#39;T&gt;<br /><br />Full name: Microsoft.FSharp.Core.option&lt;_&gt;</div>
+<div class="tip" id="fs10">val ignore : value:&#39;T -&gt; unit<br /><br />Full name: Microsoft.FSharp.Core.Operators.ignore</div>
+<div class="tip" id="fs11">val fst : tuple:(&#39;T1 * &#39;T2) -&gt; &#39;T1<br /><br />Full name: Microsoft.FSharp.Core.Operators.fst</div>
+
         <!-- Any section element inside of this container is displayed as a slide -->
         <div class="slides">
             <section >
@@ -101,7 +112,7 @@
 
 <section >
 
-<p>I've been always an OOP developer</p>
+<p>I've always been an OOP developer</p>
 
 <p>but...</p>
 
@@ -189,7 +200,7 @@
 
 <h3>Introducing to SNR</h3>
 
-<h4>Signat-to-Noise Ratio</h4>
+<h4>Signal-to-Noise Ratio</h4>
 
 <blockquote>
   <p>Compares a level of desired signal to the level of background noise.</p>
@@ -295,15 +306,11 @@
 <ul>
 <li>Irrelevant or false data</li>
 <li>Data mutation</li>
-<li>Transformation data with no added value</li>
+<li>Transformation of data with no added value</li>
 <li>Everything that hinders readability of Information</li>
 </ul>
 
 </section>
-
-</section>
-
-<section >
 
 <section >
 
@@ -322,12 +329,57 @@
 <aside class="notes">
     Organization : how the code is structured
     Readability : how it is easy to read the code. Most of the time we are reading to understand the code
-    Correctness : modeling with types, null reference exceptions, no side effects
+    Correctness : modeling with types, null reference exceptions, no side effects, try catch
     Expressiveness : how much plumbing code, curly braces punctuations, powerfull type inference
     Frameworks : how many frameworks for DI, AOP, ORMS
-    Effort : how difficult is to write code, know design patterns etc.
+    Effort : how difficult is to write code, maintain and refactor, know design patterns etc.
     Complexity : cyclic dependencies, LoC, Cyclomatic Complexity
 </aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Theoretical metric</h3>
+
+<h4>Applicable to each business use case</h4>
+
+<p><span class="math">\(\mathrm{CodeSNR} = \frac{LoC_\mathrm{domain}}{LoC_\mathrm{total}}\times{100}\)</span></p>
+
+<p>The bigger the CodeSNR is, the better it is</p>
+
+</section>
+
+<section >
+
+<h3>Categories of noises</h3>
+
+<h4>% of LoC of particular noise</h4>
+
+<ul>
+<li>Correctness</li>
+<li>Expressiveness</li>
+<li>Frameworks</li>
+<li>Complexity</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Categories of noises</h3>
+
+<h4>Subjective estimation</h4>
+
+<ul>
+<li>Organization</li>
+<li>Readability</li>
+<li>Effort</li>
+</ul>
 
 </section>
 
@@ -442,13 +494,912 @@
 
 <section >
 
+<h3>Naive OOP implementation noises</h3>
+
+<p>Lines of code: <strong>399</strong></p>
+
+<ul>
+<li>Correctness:       <strong>26%</strong></li>
+<li>Expressiveness:    <strong>25%</strong></li>
+<li>Frameworks:        <strong>42%</strong></li>
+<li>Complexity:        <strong>Max 6 - Average 1.56</strong></li>
+<li>Organization:      <strong>Easy</strong></li>
+<li>Readability:       <strong>Bad</strong></li>
+<li>Effort:            <strong>High</strong>
+<br />
+<br />
+CodeSNR = <strong>7%</strong></li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Refactored OOP implementation page 1</h3>
+
+<table class="pre"><tr><td><pre lang="csharp">[HttpPost]
+[Route(<span class="s">"api/register"</span>)]
+<span class="k">public</span> IHttpActionResult Register(RegisterRepresentation rep)
+{
+    <span class="k">var</span> confirmationUrl <span class="o">=</span> <span class="k">new</span> Uri(Request.RequestUri, <span class="s">"/confirmation"</span>);
+
+    <span class="k">if</span> (_validator.Validate(rep))
+        ModelState.AddModelError(<span class="s">"password"</span>, 
+                <span class="s">"The password format does not match the policy"</span>);
+
+    <span class="k">if</span> (ModelState.IsValid)
+    {
+        <span class="k">if</span> (!_registrationService.CanRegister(rep.Email,
+                email <span class="o">=</span><span class="o">&gt;</span> _accountRepository.FindByEmail(email)))
+            <span class="k">return</span> Conflict();
+
+        IHttpActionResult response <span class="o">=</span> Ok();
+
+        <span class="k">var</span> account <span class="o">=</span> _registrationService.Register(rep);</pre></td></tr></table>
+
+</section>
+
+<section >
+
+<h3>Refactored OOP implementation page 2</h3>
+
+<table class="pre"><tr><td><pre lang="csharp"><span class="k">if</span> (_registrationService.ShouldConfirmSubscription(rep))
+        {
+            account.SetActivationCode(Guid.NewGuid(), 
+                                    DateTime.Now.AddDays(5));
+            _notifier.SendActivationNotification(account.Email);
+
+            response <span class="o">=</span> Created(confirmationUrl, 
+                <span class="k">new</span> ConfirmationRepresentation
+                {
+                    Email <span class="o">=</span> account.Email,
+                    Code <span class="o">=</span> account.ActivationCode,
+                    ExpirationTime <span class="o">=</span> 
+                        account.ActivationCodeExpirationTime.Value
+                });
+        }
+        _accountRepository.Save(account);
+        <span class="k">return</span> response;
+    }
+    <span class="k">return</span> BadRequest(ModelState);
+}</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Refactored OOP implementation noises</h3>
+
+<p>Lines of code: <strong>574</strong> (+45%)</p>
+
+<ul>
+<li>Correctness:       <strong>25%</strong> (+1%)</li>
+<li>Expressiveness:    <strong>34%</strong> (+9%)</li>
+<li>Frameworks:        <strong>42%</strong> (-6%)</li>
+<li>Complexity:        <strong>Max 5 - Average 1.56</strong></li>
+<li>Organization:      <strong>Hard</strong></li>
+<li>Readability:       <strong>Good</strong></li>
+<li>Effort:            <strong>Medium</strong>
+<br />
+<br />
+CodeSNR = <strong>5%</strong> (-2%)</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Immediate feedback</h3>
+
+<ul>
+<li>Lines of code explosion because of new "abstractions"</li>
+<li>Interface map to implementation 1:1</li>
+<li>RAP principle is violated</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>F# signal improvement</h3>
+
+<p>HTTP is a functional type</p>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span> <span class="k">-&gt;</span> <span class="i">Response</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Http as function</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="k">-&gt;</span> 
+
+            <span class="c">// business use case</span>
+            (<span class="o">&#39;</span><span class="i">T</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">V</span>) <span class="k">-&gt;</span>
+
+            <span class="i">Response</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Error handling</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">TSuccess</span>,<span class="o">&#39;</span><span class="i">TFailure</span><span class="o">&gt;</span> <span class="o">=</span> 
+    | <span class="i">Success</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TSuccess</span>
+    | <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="i">Failure</span> <span class="k">of</span> <span class="o">&#39;</span><span class="i">TFailure</span>
+
+<span class="k">type</span> <span class="i">Error</span> <span class="o">=</span>
+    | <span class="i">ValidationError</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="i">string</span>
+    | <span class="i">AccountExists</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="i">string</span>
+    | <span class="i">DatabaseError</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="i">string</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Http as function with error handling</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="k">-&gt;</span> 
+
+            <span class="c">// business use case</span>
+            (<span class="o">&#39;</span><span class="i">T</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">V</span>, <span class="i">Error</span><span class="o">&gt;</span>) <span class="k">-&gt;</span>
+
+            <span class="i">Response</span><span class="o">&lt;</span>_<span class="o">&gt;</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Business use case</h3>
+
+<ul>
+<li>validate input</li>
+<li>invoke domain</li>
+<li>persist</li>
+<li>return result or error</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Input validation</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">passwordPolicy</span> <span class="i">registerRepresentation</span> <span class="o">=</span>
+
+    <span class="k">match</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Password</span> <span class="k">with</span>
+        | <span class="i">Match</span> <span class="s">@&quot;</span><span class="s">(</span><span class="s">?</span><span class="s">!</span><span class="s">.</span><span class="s">*</span><span class="s">\</span><span class="s">s</span><span class="s">)</span><span class="s">[</span><span class="s">0</span><span class="s">-</span><span class="s">9</span><span class="s">a</span><span class="s">-</span><span class="s">zA</span><span class="s">-</span><span class="s">Z</span><span class="s">!</span><span class="s">@</span><span class="s">#</span><span class="s">\</span><span class="s">\</span><span class="s">$</span><span class="s">%</span><span class="s">*</span><span class="s">(</span><span class="s">)</span><span class="s">_</span><span class="s">+</span><span class="s">^</span><span class="s">&amp;</span><span class="s">amp</span><span class="s">;</span><span class="s">}</span><span class="s">{</span><span class="s">:</span><span class="s">;</span><span class="s">?</span><span class="s">.</span><span class="s">]</span><span class="s">*</span><span class="s">$</span><span class="s">&quot;</span> _ <span class="k">-&gt;</span> 
+                <span class="i">registerRepresentation</span> <span class="o">|&gt;</span> <span class="i">Success</span>
+        | _ <span class="k">-&gt;</span>  <span class="i">ValidationError</span>(<span class="s">&quot;</span><span class="s">The</span><span class="s"> </span><span class="s">password</span><span class="s"> </span><span class="s">format</span><span class="s"> </span><span class="s">does</span><span class="s"> </span>
+<span class="s">                                    </span><span class="s">not</span><span class="s"> </span><span class="s">match</span><span class="s"> </span><span class="s">the</span><span class="s"> </span><span class="s">policy</span><span class="s">&quot;</span>) 
+                                       <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 5)" onmouseover="showTip(event, 'fs1', 5)" class="i">Failure</span>
+
+<span class="c">//-----------------</span>
+
+<span class="k">val</span> <span class="i">passwordPolicy</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span> 
+                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span>
+<span class="c">//-----------------</span>
+
+<span class="k">let</span> (|<span class="i">Match</span>|_|) <span class="i">regex</span> <span class="i">str</span> <span class="o">=</span>
+    <span class="k">let</span> <span class="i">m</span> <span class="o">=</span> <span class="i">Regex</span>(<span class="i">regex</span>)<span class="o">.</span><span class="i">Match</span>(<span class="i">str</span>)
+    <span class="k">match</span> <span class="i">m</span><span class="o">.</span><span class="i">Success</span> <span class="k">with</span>
+      | <span class="k">true</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs3', 6)" onmouseover="showTip(event, 'fs3', 6)" class="i">Some</span> (<span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="i">List</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="i">tail</span> [<span class="k">for</span> <span class="i">g</span> <span class="k">in</span> <span class="i">m</span><span class="o">.</span><span class="i">Groups</span> <span class="k">-&gt;</span> <span class="i">g</span><span class="o">.</span><span class="i">Value</span>])
+      | <span class="k">false</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="i">None</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Input validation composition</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> (<span class="o">&amp;&amp;&amp;</span>) <span class="i">v1</span> <span class="i">v2</span> <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">addSuccess</span> <span class="i">r1</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">r1</span> <span class="c">// return first</span>
+    <span class="k">let</span> <span class="i">addFailure</span> <span class="i">s1</span> <span class="i">s2</span> <span class="o">=</span> <span class="i">concatErrors</span> [<span class="i">s1</span>; <span class="i">s2</span>]  <span class="c">// concat</span>
+    <span class="i">plus</span> <span class="i">addSuccess</span> <span class="i">addFailure</span> <span class="i">v1</span> <span class="i">v2</span> 
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">v1</span><span class="o">:</span> <span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span>, <span class="i">Error</span><span class="o">&gt;</span>
+<span class="k">val</span> <span class="i">v2</span><span class="o">:</span> <span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">c</span>, <span class="i">Error</span><span class="o">&gt;</span>
+<span class="c">//-----------------</span>
+
+<span class="k">let</span> <span class="i">validateAll</span> <span class="o">=</span>
+    <span class="i">passwordPolicy</span> <span class="o">&amp;&amp;&amp;</span> <span class="i">checkPrivacy</span>
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">validateAll</span> <span class="o">:</span> (<span class="i">RegisterRepresentation</span> 
+                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Mapping to domain</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">normalizeEmail</span> <span class="i">registerRepresentation</span> <span class="o">=</span>
+{
+    <span class="i">Account</span><span class="o">.</span><span class="i">Email</span> <span class="o">=</span> 
+        <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Email</span><span class="o">.</span><span class="i">Trim</span>()<span class="o">.</span><span class="i">ToLower</span>() 
+                    <span class="o">|&gt;</span> <span class="i">EmailAddress</span> <span class="o">|&gt;</span> <span class="i">Unverified</span>
+    <span class="i">Password</span> <span class="o">=</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Password</span>
+    <span class="i">Provider</span> <span class="o">=</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Provider</span>
+    <span class="i">Confirmation</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="i">None</span>
+}</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Designing domain with types</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">EmailAddress</span> <span class="o">=</span> <span class="i">EmailAddress</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 11)" onmouseover="showTip(event, 'fs2', 11)" class="i">string</span>
+
+<span class="k">type</span> <span class="i">VerifiedEmailAddress</span> <span class="o">=</span> <span class="i">VerifiedEmail</span> <span class="k">of</span> <span class="i">EmailAddress</span>
+
+<span class="k">type</span> <span class="i">EmailAddressContactInfo</span> <span class="o">=</span>
+    | <span class="i">Unverified</span> <span class="k">of</span> <span class="i">EmailAddress</span>
+    | <span class="i">Verified</span> <span class="k">of</span> <span class="i">VerifiedEmailAddress</span>
+
+[&lt;<span onmouseout="hideTip(event, 'fs7', 12)" onmouseover="showTip(event, 'fs7', 12)" class="i">NoEquality</span>;<span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="i">NoComparison</span>&gt;]
+<span class="k">type</span> <span class="i">Account</span> <span class="o">=</span>
+    {
+        <span class="i">Email</span> <span class="o">:</span> <span class="i">EmailAddressContactInfo</span>
+        <span class="i">Password</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="i">string</span>
+        <span class="i">Provider</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 15)" onmouseover="showTip(event, 'fs2', 15)" class="i">string</span>
+        <span class="i">Confirmation</span> <span class="o">:</span> <span class="i">ConfirmationInfo</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="i">option</span>
+    }</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Domain logic and types</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">tryConfirmEmail</span> <span class="i">account</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="i">account</span><span class="o">.</span><span class="i">Provider</span>, <span class="i">account</span><span class="o">.</span><span class="i">Email</span> <span class="k">with</span>
+        | <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>, <span class="i">Unverified</span> <span class="i">e</span> <span class="k">-&gt;</span> 
+            {<span class="i">account</span> <span class="k">with</span> <span class="i">Email</span> <span class="o">=</span> <span class="i">e</span> <span class="o">|&gt;</span> 
+                    <span class="i">VerifiedEmail</span> <span class="o">|&gt;</span> <span class="i">Verified</span>}<span class="o">|&gt;</span> <span class="i">Success</span>
+        | <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>, <span class="i">Verified</span> _ <span class="k">-&gt;</span> <span class="i">account</span> <span class="o">|&gt;</span> <span class="i">Success</span>
+        | _ <span class="k">-&gt;</span> <span class="i">account</span> <span class="o">|&gt;</span> <span class="i">Success</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Persisting with Type Providers</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">persistRegistration</span> <span class="o">=</span>
+    <span class="i">tryCatch</span> (<span class="i">tee</span> (<span class="i">save</span> <span class="i">mapRegistration</span>)) 
+            (<span class="k">fun</span> <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">DatabaseError</span>(<span class="i">ex</span><span class="o">.</span><span class="i">Message</span>))
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">persistRegistration</span><span class="o">:</span> (<span class="i">Account</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">Account</span>,<span class="i">Error</span><span class="o">&gt;</span>)
+<span class="c">//-----------------</span>
+
+<span class="c">// convert a dead-end function into a one-track function</span>
+<span class="k">let</span> <span class="i">tee</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="i">ignore</span>
+    <span class="i">x</span>
+
+<span class="c">// convert a one-track function into a switch with exception handling</span>
+<span class="k">let</span> <span class="i">tryCatch</span> <span class="i">f</span> <span class="i">exnHandler</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="k">try</span>
+        <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span class="i">Success</span>
+    <span class="k">with</span>
+    | <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">exnHandler</span> <span class="i">ex</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="i">Failure</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Persistance mapping</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">dbSchema</span> <span class="o">=</span> <span class="i">SqlDataConnection</span><span class="o">&lt;</span><span class="s">&quot;</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span><span class="o">&gt;</span>
+
+<span class="k">let</span> <span class="i">save</span> <span class="i">map</span> <span class="i">input</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="i">db</span> <span class="o">=</span> <span class="i">dbSchema</span><span class="o">.</span><span class="i">GetDataContext</span>()
+
+    <span class="k">let</span> <span class="i">newRecord</span> <span class="o">=</span> <span class="i">map</span> <span class="i">input</span>
+
+    <span class="i">db</span><span class="o">.</span><span class="i">AccountEntity</span><span class="o">.</span><span class="i">InsertOnSubmit</span>(<span class="i">newRecord</span>)
+    <span class="i">db</span><span class="o">.</span><span class="i">DataContext</span><span class="o">.</span><span class="i">SubmitChanges</span>()
+
+<span class="k">let</span> <span class="i">mapRegistration</span> <span class="i">input</span> <span class="o">=</span>
+
+    <span class="k">let</span> <span class="i">newRecord</span> <span class="o">=</span> <span class="k">new</span> <span class="i">dbSchema</span><span class="o">.</span><span class="i">ServiceTypes</span><span class="o">.</span><span class="i">AccountEntity</span>()
+
+    <span class="i">newRecord</span><span class="o">.</span><span class="i">Password</span> <span class="o">&lt;-</span> <span class="i">input</span><span class="o">.</span><span class="i">Password</span>
+    <span class="i">newRecord</span><span class="o">.</span><span class="i">Provider</span> <span class="o">&lt;-</span> <span class="i">input</span><span class="o">.</span><span class="i">Provider</span>
+
+    <span class="k">let</span> <span class="i">email</span>, <span class="i">isConfirmed</span> <span class="o">=</span> <span class="i">getEmail</span> <span class="i">input</span>
+    <span class="i">newRecord</span><span class="o">.</span><span class="i">Email</span> <span class="o">&lt;-</span> <span class="i">email</span>
+    <span class="i">newRecord</span><span class="o">.</span><span class="i">IsEmailConfirmed</span> <span class="o">&lt;-</span> <span class="i">isConfirmed</span>
+
+    <span class="i">newRecord</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Compose business use case</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">start</span> <span class="o">=</span>
+        <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Compose business use case'</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> (<span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span>) <span class="i">f1</span> <span class="i">f2</span> <span class="o">=</span> 
+    <span class="i">f1</span> <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">f2</span>
+
+<span class="k">let</span> <span class="i">start</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Register it within Web Api framework</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">type</span> <span class="i">CustomControllerActivator</span>() <span class="o">=</span>
+    <span class="k">interface</span> <span class="i">IHttpControllerActivator</span> <span class="k">with</span>
+        <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Create</span>(<span class="i">request</span>, <span class="i">controllerDescriptor</span>, 
+                            <span class="i">controllerType</span>) <span class="o">=</span>
+            <span class="k">new</span> <span class="i">RegisterController</span>(<span class="i">UseCases</span><span class="o">.</span><span class="i">Registration</span><span class="o">.</span><span class="i">start</span>) 
+                                            <span class="o">:&gt;</span> <span class="i">IHttpController</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Handle it</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+[&lt;<span class="i">HttpPost</span>&gt;]
+[&lt;<span class="i">Route</span>(<span class="s">&quot;</span><span class="s">api</span><span class="s">/</span><span class="s">register</span><span class="s">&quot;</span>)&gt;]
+<span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Register</span>(<span class="i">representation</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span>) <span class="o">=</span>
+  <span class="k">let</span> <span class="i">confirmationUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confirmation</span><span class="s">&quot;</span>)
+  <span class="k">match</span> <span class="i">startProcess</span> <span class="i">representation</span> <span class="k">with</span>
+    | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> 
+        <span class="k">match</span> <span class="i">s</span><span class="o">.</span><span class="i">Confirmation</span> <span class="k">with</span>
+        | <span onmouseout="hideTip(event, 'fs3', 19)" onmouseover="showTip(event, 'fs3', 19)" class="i">Some</span> <span class="i">c</span> <span class="k">-&gt;</span> 
+            <span class="k">match</span> <span class="i">c</span><span class="o">.</span><span class="i">Activation</span> <span class="k">with</span>
+            | <span onmouseout="hideTip(event, 'fs3', 20)" onmouseover="showTip(event, 'fs3', 20)" class="i">Some</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmationUrl</span>,
+                        { 
+                            <span class="i">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 21)" onmouseover="showTip(event, 'fs11', 21)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">s</span>)
+                            <span class="i">Code</span> <span class="o">=</span> <span class="i">a</span><span class="o">.</span><span class="i">ActivationCode</span> 
+                        }) <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+            | <span onmouseout="hideTip(event, 'fs6', 22)" onmouseover="showTip(event, 'fs6', 22)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span onmouseout="hideTip(event, 'fs6', 23)" onmouseover="showTip(event, 'fs6', 23)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+    | <span onmouseout="hideTip(event, 'fs1', 24)" onmouseover="showTip(event, 'fs1', 24)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
+        <span class="k">match</span> <span class="i">f</span> <span class="k">with</span>
+        | <span class="i">ValidationError</span> <span class="i">ve</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">BadRequest</span>(<span class="i">x</span><span class="o">.</span><span class="i">ModelState</span>) 
+                                <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span class="i">AccountExists</span> _ <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Conflict</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span class="i">DatabaseError</span> <span class="i">de</span> <span class="k">-&gt;</span> 
+            <span class="i">x</span><span class="o">.</span><span class="i">InternalServerError</span>(<span class="i">Exception</span>(<span class="i">de</span>)) 
+                                <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Handle it'</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+<span class="l">24: </span>
+<span class="l">25: </span>
+<span class="l">26: </span>
+<span class="l">27: </span>
+<span class="l">28: </span>
+<span class="l">29: </span>
+<span class="l">30: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+[&lt;<span class="i">HttpPost</span>&gt;]
+[&lt;<span class="i">Route</span>(<span class="s">&quot;</span><span class="s">api</span><span class="s">/</span><span class="s">register</span><span class="s">&quot;</span>)&gt;]
+<span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Register2</span>(<span class="i">representation</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span>) <span class="o">=</span>
+   <span class="k">let</span> <span class="i">confirmationUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confir</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span>)
+   <span class="k">match</span> <span class="i">startProcess</span> <span class="i">representation</span> <span class="k">with</span>
+    | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> 
+      <span class="k">let</span> <span class="i">rsp</span> <span class="o">=</span> 
+        <span class="i">maybeRes</span>
+        {
+            <span class="k">let!</span> <span class="i">confirmation</span> <span class="o">=</span> <span class="i">s</span> <span class="o">|&gt;</span> (<span class="k">fun</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">a</span><span class="o">.</span><span class="i">Conf</span>) 
+            <span class="k">let!</span> <span class="i">activation</span> <span class="o">=</span> <span class="i">confirmation</span> 
+                                <span class="o">|&gt;</span> (<span class="k">fun</span> <span class="i">c</span> <span class="k">-&gt;</span> <span class="i">c</span><span class="o">.</span><span class="i">Acti</span>)
+            <span class="k">let!</span> <span class="i">r</span> <span class="o">=</span> (<span class="i">s</span>, <span class="i">activation</span>) <span class="o">|&gt;</span> (<span class="k">fun</span> (<span class="i">ss</span>, <span class="i">a</span>) <span class="k">-&gt;</span> 
+                    <span onmouseout="hideTip(event, 'fs3', 25)" onmouseover="showTip(event, 'fs3', 25)" class="i">Some</span> (<span class="i">getConf</span> (<span onmouseout="hideTip(event, 'fs11', 26)" onmouseover="showTip(event, 'fs11', 26)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">ss</span>)) <span class="i">a</span>))
+            <span class="k">return</span> <span class="i">r</span>
+        }
+        <span class="k">match</span> <span class="i">rsp</span> <span class="k">with</span>
+        | <span onmouseout="hideTip(event, 'fs3', 27)" onmouseover="showTip(event, 'fs3', 27)" class="i">Some</span> <span class="i">r</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmationUrl</span>, <span class="i">r</span>) 
+                            <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span onmouseout="hideTip(event, 'fs6', 28)" onmouseover="showTip(event, 'fs6', 28)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+
+    | <span onmouseout="hideTip(event, 'fs1', 29)" onmouseover="showTip(event, 'fs1', 29)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
+        <span class="k">match</span> <span class="i">f</span> <span class="k">with</span>
+        | <span class="i">ValidationError</span> <span class="i">ve</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">BadRequest</span>(<span class="i">x</span><span class="o">.</span><span class="i">ModelState</span>) 
+                                <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span class="i">AccountExists</span> _ <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Conflict</span>() 
+                                <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span class="i">DatabaseError</span> <span class="i">de</span> <span class="k">-&gt;</span> 
+                <span class="i">x</span><span class="o">.</span><span class="i">InternalServerError</span>(<span class="i">Exception</span>(<span class="i">de</span>)) 
+                                <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>F# implementation noises</h3>
+
+<p>Lines of code: <strong>397</strong></p>
+
+<ul>
+<li>Correctness:       <strong>5%</strong> (-20%)</li>
+<li>Expressiveness:    <strong>10%</strong> (-24%)</li>
+<li>Frameworks:        <strong>28%</strong> (-14%)</li>
+<li>Complexity:        <strong>N/A</strong></li>
+<li>Organization:      <strong>Easy</strong></li>
+<li>Readability:       <strong>Excellent</strong></li>
+<li>Effort:            <strong>Low</strong>
+<br />
+<br />
+CodeSNR = <strong>23%</strong> (+16%)</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>How we've improved the signal with F#</h3>
+
+<ul>
+<li>No need of frameworks for DI</li>
+<li>No need of AOP frameworks</li>
+<li>No need of ORM frameworks</li>
+<li>No need to know 23 OOP patterns and more</li>
+</ul>
+
+<aside class="notes">
+    DI : Partial application
+
+<p>Dependencies can only happen when a specific type is referenced. If you use generic types, you cannot have a dependency! And rather than hard coding behavior for a type, why not parameterize it by passing in functions instead?</p>
+
+<p>A more functional approach: separating types from functions</p>
+
+<p>AOP: Higher level functions, monads level of abstractions to hide complexisty
+</aside></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>OOP</h3>
+
+<h4>OOP promise REUSE = Big Lie</h4>
+
+<aside class="notes">
+    OOP promis REUSE = Big Lie (everything new you need you write a new class) Different classes with same name fields and we can do nothing because of specificity.
+</aside>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Values</h3>
+
+<ul>
+<li>Shared freely, no one can mess up</li>
+<li>No locks, copy, clone easy to fabricate (testing, simulation)</li>
+<li>Discurage imperative programming</li>
+<li>Generic (map, list, sets)</li>
+<li>Best interface</li>
+<li>Can be composed and aggregated</li>
+</ul>
+
+<aside class="notes">
+    values can be moved, ported and the so (how do you do when you have to move between different interfaces ?)
+
+<p>values aggregates values (COMPOSITION) how do you agregate places in OOP ?</p>
+
+<p>you can't have a single view on a value with multiple getters (OOP) because you need the reicipe
+</aside></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
 <h3>Let's create a REST service</h3>
 
-<h4>Turned bad...</h4>
+<h4>Can turn bad easily with OOP...</h4>
 
-<h5>very bad...</h5>
-
-<p><img src="images/turnedBad.jpg" alt="alt text" title="OOP red flags" /></p>
+<h5>when not very carfeully used...</h5>
 
 </section>
 
@@ -458,7 +1409,7 @@
 
 <section >
 
-<h3>Like many things in life after all</h3>
+<h3>Like many things in the real life after all</h3>
 
 </section>
 
@@ -503,6 +1454,21 @@
 <blockquote>
   <p>Anything that can go wrong, will go wrong.</p>
 </blockquote>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>References</h3>
+
+<ul>
+<li><a href="http://fsharpforfunandprofit.com/posts/recipe-part2/">http://fsharpforfunandprofit.com/posts/recipe-part2/</a></li>
+<li>MSDN</li>
+</ul>
 
 </section>
 
