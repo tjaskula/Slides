@@ -211,40 +211,17 @@
 <p><span class="math">\(\mathrm{SNR} = \frac{\mu_\mathrm{sig}}{\sigma_\mathrm{bg}}\)</span></p>
 
 <aside class="notes">
-    Mean (μ)    = ∑ X / n
-    = (50+30+20+35+25) / 5
-    = 160 / 5
-    = 32
+    Mean (μ)  
+    Standard Deviation (σ) 
+    SNR = μ / σ = 32 / 11.51086 = 2.7799834243488326
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="i">Standard</span> <span class="i">Deviation</span> (<span class="i">σ</span>)  <span class="o">=</span> 
-<span class="o">=</span> 
-<span class="o">=</span> 
-<span class="o">=</span> 
-<span class="o">=</span> 
-<span class="o">=</span> <span class="n">11.51086</span>
-
-<span class="i">SNR</span> <span class="o">=</span> <span class="i">μ</span> <span class="o">/</span> <span class="i">σ</span>
-<span class="o">=</span> <span class="n">32</span> <span class="o">/</span> <span class="n">11.51086</span>
-<span class="o">=</span> <span class="n">2.7799834243488326</span>
-
 <span class="i">Signal</span> <span class="k">to</span> <span class="i">noise</span> <span class="i">ratio</span> <span class="i">is</span> <span class="i">a</span> <span class="i">measurement</span> <span class="k">of</span> <span class="i">the</span> <span class="i">audio</span> <span class="i">signal</span> <span class="i">level</span> <span class="i">compared</span> <span class="k">to</span> <span class="i">the</span> <span class="i">noise</span> <span class="i">level</span> <span class="i">present</span> <span class="k">in</span> <span class="i">the</span> <span class="i">signal</span><span class="o">.</span> <span class="i">SNR</span> <span class="i">specifications</span> <span class="i">are</span> <span class="i">used</span> <span class="k">in</span> <span class="i">components</span> <span class="i">such</span> <span class="k">as</span> <span class="i">amplifiers</span>, <span class="i">CD</span><span class="o">/</span><span class="i">DVD</span> <span class="i">players</span> <span class="i">etc</span><span class="o">.</span>,
 
 <span class="i">Signal</span><span class="o">-</span><span class="k">to</span><span class="o">-</span><span class="i">noise</span> <span class="i">ratio</span> <span class="i">is</span> <span class="i">sometimes</span> <span class="i">used</span> <span class="i">informally</span> <span class="k">to</span> <span class="i">refer</span> <span class="k">to</span> <span class="i">the</span> <span class="i">ratio</span> <span class="k">of</span> <span class="i">useful</span> <span class="i">information</span> <span class="k">to</span> <span class="k">false</span> <span class="k">or</span> <span class="i">irrelevant</span> <span class="i">data</span> <span class="k">in</span> <span class="i">a</span> <span class="i">conversation</span> <span class="k">or</span> <span class="i">exchange</span><span class="o">.</span> <span class="i">For</span> <span class="i">example</span>, <span class="k">in</span> <span class="i">online</span> <span class="i">discussion</span> <span class="i">forums</span> <span class="k">and</span> <span class="i">other</span> <span class="i">online</span> <span class="i">communities</span>, <span class="i">off</span><span class="o">-</span><span class="i">topic</span> <span class="i">posts</span> <span class="k">and</span> <span class="i">spam</span> <span class="i">are</span> <span class="i">regarded</span> <span class="k">as</span> <span class="s">&quot;</span><span class="s">noise</span><span class="s">&quot;</span> <span class="i">that</span> <span class="i">interferes</span> <span class="k">with</span> <span class="i">the</span> <span class="s">&quot;</span><span class="s">signal</span><span class="s">&quot;</span> <span class="k">of</span> <span class="i">appropriate</span> <span class="i">discussion</span><span class="o">.</span></pre>
@@ -269,7 +246,7 @@
 <h3>Signal</h3>
 
 <blockquote>
-  <p>"Signal is information which conveys knowledge via facts. Knowledge is a business value"</p>
+  <p>"Signal is information which conveys knowledge via facts. Knowledge is <strong>derived</strong> from Facts. Fact is produced by a <strong>Business Use Case</strong> in time"</p>
 </blockquote>
 
 </section>
@@ -279,14 +256,16 @@
 <h3>Signal properties</h3>
 
 <ul>
-<li>Fact that happened incorporated in time</li>
-<li>Immutable value</li>
+<li><strong>Fact</strong> that happened incorporated in time</li>
+<li>Fact is an <strong>Immutable Value</strong></li>
+<li><strong>Decisions</strong> are made on facts (humans and machines)</li>
 </ul>
 
 <aside class="notes">
     What is Fact ? it's not a place (like in OOP language) but rather a value Fact = something that happend, that existed, incorporate time
     Knowledge is derived from facts, comparing facts from different time points all the time.
     If mutable in a time a needs to be protected (OOP) (lock?)
+    Why this is important ? We can assert on Facts and not on mechanisms
 </aside>
 
 </section>
@@ -296,7 +275,7 @@
 <h3>Noise</h3>
 
 <blockquote>
-  <p>"Everything which infers with a signal and not contribute to the business value"</p>
+  <p>"Everything which infers with a signal and not contribute to the <strong>Knowledge</strong>"</p>
 </blockquote>
 
 </section>
@@ -307,9 +286,8 @@
 
 <ul>
 <li>Irrelevant or false data</li>
-<li>Data mutation</li>
-<li>Transformation of data with no added value</li>
-<li>Everything that hinders readability of Information</li>
+<li>Fact mutation</li>
+<li>Everything that hinders readability of Facts</li>
 </ul>
 
 </section>
@@ -330,7 +308,7 @@
 
 <aside class="notes">
     Organization : how the code is structured
-    Readability : how it is easy to read the code. Most of the time we are reading to understand the code
+    Readability : how it is easy to read the code. Most of the time we are reading to understand the code, naming
     Correctness : modeling with types, null reference exceptions, no side effects, try catch
     Expressiveness : how much plumbing code, curly braces punctuations, powerfull type inference
     Frameworks : how many frameworks for DI, AOP, ORMS
@@ -350,7 +328,7 @@
 
 <h4>Applicable to each business use case</h4>
 
-<p><span class="math">\(\mathrm{CodeSNR} = \frac{LoC_\mathrm{domain}}{LoC_\mathrm{total}}\times{100}\)</span></p>
+<p><span class="math">\(\mathrm{CodeSNR} = \frac{LoC_\mathrm{domainUseCase}}{LoC_\mathrm{total}}\times{100}\)</span></p>
 
 <p>The bigger the CodeSNR is, the better it is</p>
 
@@ -358,9 +336,15 @@
 
 <section >
 
+<p>Unfortunately there is no an automatic tool to measure it...</p>
+
+</section>
+
+<section >
+
 <h3>Categories of noises</h3>
 
-<h4>% of LoC of particular noise</h4>
+<h4>Can be measured</h4>
 
 <ul>
 <li>Correctness</li>
@@ -375,7 +359,7 @@
 
 <h3>Categories of noises</h3>
 
-<h4>Subjective estimation</h4>
+<h4>Just a subjective estimation</h4>
 
 <ul>
 <li>Organization</li>
@@ -412,7 +396,23 @@
 
 <section >
 
-<h3>Naive OOP implementation Page 1</h3>
+<h3>ASP.NET Web Api 2</h3>
+
+<ul>
+<li>C# naive implementation</li>
+<li>C# OOP implementation</li>
+<li>F# implementation</li>
+</ul>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Naive OOP implementation (Page 1)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp">[HttpPost]
 [Route(<span class="s">"api/register"</span>)]
@@ -426,7 +426,7 @@
             <span class="s">@"(?!.*\s)[0-9a-zA-Z!@#\\$%*()_+^&amp;amp;}{:;?.]*$"</span>))
         {
             ModelState.AddModelError(<span class="s">"password"</span>, <span class="s">"The password 
-                                                does not match the policy"</span>);
+                                            does not match the policy"</span>);
             <span class="k">return</span> BadRequest(ModelState);
         }
 
@@ -454,11 +454,7 @@
         Provider <span class="o">=</span> rep.Provider
     };
 
-    <span class="k">if</span> (account.Provider <span class="o">=</span><span class="o">=</span> <span class="s">"OAuth"</span>)
-    {
-        account.IsEmailConfirmed <span class="o">=</span> <span class="k">true</span>;
-        account.ConfirmEmail(DateTime.Now);
-    }</pre></td></tr></table>
+    account.ConfirmEmail(DateTime.Now);</pre></td></tr></table>
 
 </section>
 
@@ -646,7 +642,7 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 <p>Interface map to implementation 1:1</p>
 
-<p><img src="images/lineExplosion.jpg" alt="alt text" title="Too many implementations and abstractions" /></p>
+<p><img src="images/CSharpRefactoredProj.jpg" alt="alt text" title="Too many implementations and abstractions" /></p>
 
 </section>
 
@@ -676,6 +672,22 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span> <span class="k">-&gt;</span> <span class="i">Response</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Business Use Case as a function</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">useCase</span> <span class="o">=</span> <span class="o">&#39;</span><span class="i">Input</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">Fact</span></pre>
 </td>
 </tr>
 </table>
@@ -1498,8 +1510,8 @@ CodeSNR = <strong>23%</strong> (+16%)</li>
 
 <p>Code organization</p>
 
-<p><img src="images/lineExplosion.jpg" alt="alt text" title="Too many implementations and abstractions" />
-<img src="images/OrgaFsharp.jpg" alt="alt text" title="Easy to understand organisation" /></p>
+<p><img src="images/CSharpRefactoredProj.jpg" alt="alt text" title="Too many implementations and abstractions" />
+<img src="images/FSharpProj.jpg" alt="alt text" title="Easy to understand organisation" /></p>
 
 <aside class="notes">
 What's nice about this approach is that, if you are a newcomer to a code base, you always know where to start. The first few files will always be the "bottom layer" of an application and the last few files will always be the "top layer". No folders needed!
