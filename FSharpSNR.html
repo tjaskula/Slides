@@ -85,8 +85,8 @@
 <li><a href="http://www.meetup.com/Functional-Programming-in-F/">F# user group</a></li>
 <li><a href="http://www.meetup.com/DDD-Paris/">Domain Driven Design user group</a></li>
 </ul></li>
-<li>twitting <a href="http://twitter.com/tjaskula">@tjaskula</a> and blogging occasionally at <a href="http://jaskula.fr">jaskula.fr</a></li>
-<li>playing guitar...</li>
+<li>Tweetting <a href="http://twitter.com/tjaskula">@tjaskula</a> and blogging occasionally at <a href="http://jaskula.fr">jaskula.fr</a></li>
+<li>Playing guitar...</li>
 </ul>
 
 </section>
@@ -180,7 +180,7 @@
 
 <section >
 
-<p>Time spent for coding must deliver a <strong>real business value</strong></p>
+<p>Time spent for coding must deliver <strong>real business value</strong></p>
 
 </section>
 
@@ -189,7 +189,7 @@
 <p>Can we measure the part of <strong>business value</strong> inside our code ?</p>
 
 <aside class="notes">
-    There is no an automatic tool or metric that can be used.
+    There is no automatic tool or metric that can be used.
 </aside>
 
 </section>
@@ -237,7 +237,7 @@
 
 <h3>SNR relation to the code</h3>
 
-<p><strong>SIGNAL</strong> = <strong>Information</strong> producing a <strong>Business Value</strong><br /><strong>NOISE</strong> = Everything else <strong>impeding</strong> the convey of Information</p>
+<p><strong>SIGNAL</strong> = <strong>Information</strong> producing <strong>Business Value</strong><br /><strong>NOISE</strong> = Everything else <strong>impeding</strong> the convey of Information</p>
 
 </section>
 
@@ -246,7 +246,7 @@
 <h3>Signal</h3>
 
 <blockquote>
-  <p>"Signal is information which conveys knowledge via facts. Knowledge is <strong>derived</strong> from Facts. Fact is produced by a <strong>Business Use Case</strong> in time"</p>
+  <p>"Signal is information which conveys knowledge via facts. Knowledge is <strong>derived</strong> from Facts. Fact is produced by <strong>Business Use Case</strong> in time"</p>
 </blockquote>
 
 </section>
@@ -336,7 +336,7 @@
 
 <section >
 
-<p>Unfortunately there is no an automatic tool to measure it...</p>
+<p>Unfortunately there is no automatic tool to measure it...</p>
 
 </section>
 
@@ -412,6 +412,18 @@
 
 <section >
 
+<h3>Registration Use Case</h3>
+
+<p><img src="images/registerUseCase.jpg" alt="alt text" title="Registration use case" /></p>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
 <h3>Naive OOP implementation (Page 1)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp">[HttpPost]
@@ -436,7 +448,7 @@
 
 <section >
 
-<h3>Naive OOP implementation Page 2</h3>
+<h3>Naive OOP implementation (Page 2)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp"><span class="k">using</span> (<span class="k">var</span> ctx <span class="o">=</span> <span class="k">new</span> RegistrationContext())
 {
@@ -460,7 +472,7 @@
 
 <section >
 
-<h3>Naive OOP implementation Page 3</h3>
+<h3>Naive OOP implementation (Page 3)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp"><span class="k">if</span> (!account.IsEmailConfirmed)
     {
@@ -492,6 +504,28 @@
 
 <section >
 
+<h3>Immediate feedback</h3>
+
+<p><img src="images/naive.jpg" alt="alt text" title="Naive use case" /></p>
+
+</section>
+
+<section >
+
+<h3>Observations</h3>
+
+<ul>
+<li>Procedural code</li>
+<li>State mutation</li>
+<li>Decisions made by intermediate steps</li>
+<li>Orchestrated by client</li>
+<li>Cannot be tested</li>
+</ul>
+
+</section>
+
+<section >
+
 <h3>Naive OOP implementation noises</h3>
 
 <p>Lines of code: <strong>399</strong></p>
@@ -517,13 +551,53 @@ CodeSNR = <strong>7%</strong></li>
 
 <section >
 
-<h3>Refactored OOP implementation page 1</h3>
+<h3>We can do better</h3>
+
+<p>OOP should not be procedural. Let's introduce some abstractions</p>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td><pre lang="csharp"><span class="k">public</span> <span class="k">interface</span> IRepresentationValidator
+{
+    <span class="k">bool</span> Validate(RegisterRepresentation representation);
+}
+
+<span class="k">public</span> <span class="k">interface</span> IRegistrationService
+{
+    <span class="k">bool</span> ShouldConfirmSubscription(RegisterRepresentation rep);
+    <span class="k">bool</span> CanRegister(<span class="k">string</span> accountEmail, 
+                        Func&lt;<span class="k">string</span>, Account&gt; canRegister);
+    Account Register(RegisterRepresentation rep);
+}
+
+<span class="k">public</span> <span class="k">interface</span> INotifier
+{
+    <span class="k">void</span> SendActivationNotification(<span class="k">string</span> emailAddress);
+}
+
+<span class="k">public</span> <span class="k">interface</span> IAccountRepository
+{
+    Account FindByEmail(<span class="k">string</span> email);
+    <span class="k">void</span> Save(Account account);
+}</pre></td></tr></table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Refactored OOP implementation (Page 1)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp">[HttpPost]
 [Route(<span class="s">"api/register"</span>)]
 <span class="k">public</span> IHttpActionResult Register(RegisterRepresentation rep)
 {
-    <span class="k">var</span> confirmationUrl <span class="o">=</span> <span class="k">new</span> Uri(Request.RequestUri, <span class="s">"/confirmation"</span>);
+    <span class="k">var</span> confirmUrl <span class="o">=</span> <span class="k">new</span> Uri(Request.RequestUri, <span class="s">"/confirm..."</span>);
 
     <span class="k">if</span> (_validator.Validate(rep))
         ModelState.AddModelError(<span class="s">"password"</span>, 
@@ -536,14 +610,14 @@ CodeSNR = <strong>7%</strong></li>
             <span class="k">return</span> Conflict();
 
         IHttpActionResult response <span class="o">=</span> Ok();
-
+        <span class="c">// what if this is null ?</span>
         <span class="k">var</span> account <span class="o">=</span> _registrationService.Register(rep);</pre></td></tr></table>
 
 </section>
 
 <section >
 
-<h3>Refactored OOP implementation page 2</h3>
+<h3>Refactored OOP implementation (Page 2)</h3>
 
 <table class="pre"><tr><td><pre lang="csharp"><span class="k">if</span> (_registrationService.ShouldConfirmSubscription(rep))
         {
@@ -551,7 +625,7 @@ CodeSNR = <strong>7%</strong></li>
                                     DateTime.Now.AddDays(5));
             _notifier.SendActivationNotification(account.Email);
 
-            response <span class="o">=</span> Created(confirmationUrl, 
+            response <span class="o">=</span> Created(confirmUrl, 
                 <span class="k">new</span> ConfirmationRepresentation
                 {
                     Email <span class="o">=</span> account.Email,
@@ -571,6 +645,29 @@ CodeSNR = <strong>7%</strong></li>
 </section>
 
 <section >
+
+<section >
+
+<h3>Immediate feedback</h3>
+
+<p><img src="images/refactored.jpg" alt="alt text" title="Refactored use case" /></p>
+
+</section>
+
+<section >
+
+<h3>Observations</h3>
+
+<ul>
+<li>Composition through dependencies and abstractions</li>
+<li>State mutation</li>
+<li>Decisions made by intermediate steps</li>
+<li>Orchestrated by client</li>
+<li>Testable</li>
+<li>Lines of code explosion because of new "abstractions"</li>
+</ul>
+
+</section>
 
 <section >
 
@@ -599,19 +696,9 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 <section >
 
-<h3>Immediate feedback</h3>
+<h3>Some noises</h3>
 
-<ul>
-<li>Lines of code explosion because of new "abstractions"</li>
-</ul>
-
-</section>
-
-<section >
-
-<h3>Immediate feedback</h3>
-
-<p>Compositions through abstractions</p>
+<p>Language construction</p>
 
 <table class="pre"><tr><td><pre lang="csharp"><span class="k">public</span> RegisterController(
         IAccountRepository accountRepository,
@@ -638,7 +725,19 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 <section >
 
-<h3>Immediate feedback</h3>
+<h3>Some noises</h3>
+
+<ul>
+<li>Introduction of ORM framework</li>
+<li>Introduction of DI framework</li>
+<li>Introduction of Mappers between layers</li>
+</ul>
+
+</section>
+
+<section >
+
+<h3>Some noises</h3>
 
 <p>Interface map to implementation 1:1</p>
 
@@ -648,10 +747,10 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 <section >
 
-<h3>Immediate feedback</h3>
+<h3>Some noises</h3>
 
 <ul>
-<li>RAP principle is violated</li>
+<li>Reused Abstraction Principle violated</li>
 </ul>
 
 </section>
@@ -711,9 +810,9 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 <span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="k">-&gt;</span> 
 
             <span class="c">// business use case</span>
-            (<span class="o">&#39;</span><span class="i">T</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">V</span>) <span class="k">-&gt;</span>
+            (<span class="o">&#39;</span><span class="i">Input</span> <span class="k">-&gt;</span> <span class="o">&#39;</span><span class="i">Fact</span>) <span class="k">-&gt;</span>
 
-            <span class="i">Response</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">V</span><span class="o">&gt;</span></pre>
+            <span class="i">Response</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Fact</span><span class="o">&gt;</span></pre>
 </td>
 </tr>
 </table>
@@ -748,6 +847,8 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 </tr>
 </table>
 
+<p>*Railway Programming <a href="http://fsharpforfunandprofit.com/posts/recipe-part2/">http://fsharpforfunandprofit.com/posts/recipe-part2/</a></p>
+
 </section>
 
 <section >
@@ -767,7 +868,7 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 <span class="k">type</span> <span class="i">Http</span> <span class="o">=</span> <span class="i">Request</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">T</span><span class="o">&gt;</span> <span class="k">-&gt;</span> 
 
             <span class="c">// business use case</span>
-            (<span class="o">&#39;</span><span class="i">T</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">V</span>, <span class="i">Error</span><span class="o">&gt;</span>) <span class="k">-&gt;</span>
+            (<span class="o">&#39;</span><span class="i">T</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">Fact</span>, <span class="i">Error</span><span class="o">&gt;</span>) <span class="k">-&gt;</span>
 
             <span class="i">Response</span><span class="o">&lt;</span>_<span class="o">&gt;</span></pre>
 </td>
@@ -795,7 +896,7 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 <section >
 
-<h3>Input validation</h3>
+<h3>Step 1 : Input validation</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -811,31 +912,41 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 <span class="l">11: </span>
 <span class="l">12: </span>
 <span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
-<span class="l">20: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
 <span class="k">let</span> <span class="i">passwordPolicy</span> <span class="i">registerRepresentation</span> <span class="o">=</span>
 
-    <span class="k">match</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Password</span> <span class="k">with</span>
-        | <span class="i">Match</span> <span class="s">@&quot;</span><span class="s">(</span><span class="s">?</span><span class="s">!</span><span class="s">.</span><span class="s">*</span><span class="s">\</span><span class="s">s</span><span class="s">)</span><span class="s">[</span><span class="s">0</span><span class="s">-</span><span class="s">9</span><span class="s">a</span><span class="s">-</span><span class="s">zA</span><span class="s">-</span><span class="s">Z</span><span class="s">!</span><span class="s">@</span><span class="s">#</span><span class="s">\</span><span class="s">\</span><span class="s">$</span><span class="s">%</span><span class="s">*</span><span class="s">(</span><span class="s">)</span><span class="s">_</span><span class="s">+</span><span class="s">^</span><span class="s">&amp;</span><span class="s">amp</span><span class="s">;</span><span class="s">}</span><span class="s">{</span><span class="s">:</span><span class="s">;</span><span class="s">?</span><span class="s">.</span><span class="s">]</span><span class="s">*</span><span class="s">$</span><span class="s">&quot;</span> _ <span class="k">-&gt;</span> 
+  <span class="k">match</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Password</span> <span class="k">with</span>
+    | <span class="i">Match</span> <span class="s">@&quot;</span><span class="s">(</span><span class="s">?</span><span class="s">!</span><span class="s">.</span><span class="s">*</span><span class="s">\</span><span class="s">s</span><span class="s">)</span><span class="s">[</span><span class="s">0</span><span class="s">-</span><span class="s">9</span><span class="s">a</span><span class="s">-</span><span class="s">zA</span><span class="s">-</span><span class="s">Z</span><span class="s">!</span><span class="s">@</span><span class="s">#</span><span class="s">\</span><span class="s">\</span><span class="s">$</span><span class="s">%</span><span class="s">*</span><span class="s">(</span><span class="s">)</span><span class="s">_</span><span class="s">+</span><span class="s">$</span><span class="s">&quot;</span> _ <span class="k">-&gt;</span> 
                 <span class="i">registerRepresentation</span> <span class="o">|&gt;</span> <span class="i">Success</span>
-        | _ <span class="k">-&gt;</span>  <span class="i">ValidationError</span>(<span class="s">&quot;</span><span class="s">The</span><span class="s"> </span><span class="s">password</span><span class="s"> </span><span class="s">format</span><span class="s"> </span><span class="s">does</span><span class="s"> </span>
+    | _ <span class="k">-&gt;</span>  <span class="i">ValidationError</span>(<span class="s">&quot;</span><span class="s">The</span><span class="s"> </span><span class="s">password</span><span class="s"> </span><span class="s">format</span><span class="s"> </span><span class="s">does</span><span class="s"> </span>
 <span class="s">                                    </span><span class="s">not</span><span class="s"> </span><span class="s">match</span><span class="s"> </span><span class="s">the</span><span class="s"> </span><span class="s">policy</span><span class="s">&quot;</span>) 
                                        <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 5)" onmouseover="showTip(event, 'fs1', 5)" class="i">Failure</span>
 
 <span class="c">//-----------------</span>
 
 <span class="k">val</span> <span class="i">passwordPolicy</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span> 
-                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span>
-<span class="c">//-----------------</span>
+                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span></pre>
+</td>
+</tr>
+</table>
 
+</section>
+
+<section >
+
+<h3>Active patterns</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
 <span class="k">let</span> (|<span class="i">Match</span>|_|) <span class="i">regex</span> <span class="i">str</span> <span class="o">=</span>
     <span class="k">let</span> <span class="i">m</span> <span class="o">=</span> <span class="i">Regex</span>(<span class="i">regex</span>)<span class="o">.</span><span class="i">Match</span>(<span class="i">str</span>)
     <span class="k">match</span> <span class="i">m</span><span class="o">.</span><span class="i">Success</span> <span class="k">with</span>
@@ -852,6 +963,94 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 <h3>Input validation composition</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">validateAll</span> <span class="o">=</span>
+    <span class="i">passwordPolicy</span> <span class="o">&amp;&amp;&amp;</span> <span class="i">checkPrivacy</span>
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">validateAll</span> <span class="o">:</span> (<span class="i">RegisterRepresentation</span> 
+                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> (<span class="o">&amp;&amp;&amp;</span>) <span class="i">v1</span> <span class="i">v2</span> <span class="o">=</span> 
+    <span class="k">let</span> <span class="i">addSuccess</span> <span class="i">r1</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">r1</span> <span class="c">// return first</span>
+    <span class="k">let</span> <span class="i">addFailure</span> <span class="i">s1</span> <span class="i">s2</span> <span class="o">=</span> <span class="i">concatErrors</span> [<span class="i">s1</span>; <span class="i">s2</span>]  <span class="c">// concat</span>
+    <span class="i">plus</span> <span class="i">addSuccess</span> <span class="i">addFailure</span> <span class="i">v1</span> <span class="i">v2</span> 
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">v1</span><span class="o">:</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span>, <span class="i">Error</span><span class="o">&gt;</span>)
+<span class="k">val</span> <span class="i">v2</span><span class="o">:</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">c</span>, <span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Registration use case</h3>
+
+<h4>After step 1</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">useCase</span> <span class="o">=</span> <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+
+<span class="c">//-----------------</span>
+(<span class="i">RegisterRepresentation</span> <span class="k">-&gt;</span>
+ <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>,<span class="i">Domain</span><span class="o">.</span><span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Step 2 : Designing domain with types</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
 <span class="l"> 2: </span>
 <span class="l"> 3: </span>
@@ -871,31 +1070,47 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> (<span class="o">&amp;&amp;&amp;</span>) <span class="i">v1</span> <span class="i">v2</span> <span class="o">=</span> 
-    <span class="k">let</span> <span class="i">addSuccess</span> <span class="i">r1</span> <span class="i">r2</span> <span class="o">=</span> <span class="i">r1</span> <span class="c">// return first</span>
-    <span class="k">let</span> <span class="i">addFailure</span> <span class="i">s1</span> <span class="i">s2</span> <span class="o">=</span> <span class="i">concatErrors</span> [<span class="i">s1</span>; <span class="i">s2</span>]  <span class="c">// concat</span>
-    <span class="i">plus</span> <span class="i">addSuccess</span> <span class="i">addFailure</span> <span class="i">v1</span> <span class="i">v2</span> 
+<span class="k">type</span> <span class="i">EmailAddress</span> <span class="o">=</span> <span class="i">EmailAddress</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 10)" onmouseover="showTip(event, 'fs2', 10)" class="i">string</span>
 
-<span class="c">//-----------------</span>
-<span class="k">val</span> <span class="i">v1</span><span class="o">:</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">b</span>, <span class="i">Error</span><span class="o">&gt;</span>)
-<span class="k">val</span> <span class="i">v2</span><span class="o">:</span> (<span class="o">&#39;</span><span class="i">a</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="o">&#39;</span><span class="i">c</span>, <span class="i">Error</span><span class="o">&gt;</span>)
-<span class="c">//-----------------</span>
+<span class="k">type</span> <span class="i">VerifiedEmailAddress</span> <span class="o">=</span> <span class="i">VerifiedEmail</span> <span class="k">of</span> <span class="i">EmailAddress</span>
 
-<span class="k">let</span> <span class="i">validateAll</span> <span class="o">=</span>
-    <span class="i">passwordPolicy</span> <span class="o">&amp;&amp;&amp;</span> <span class="i">checkPrivacy</span>
+<span class="k">type</span> <span class="i">EmailAddressContactInfo</span> <span class="o">=</span>
+    | <span class="i">Unverified</span> <span class="k">of</span> <span class="i">EmailAddress</span>
+    | <span class="i">Verified</span> <span class="k">of</span> <span class="i">VerifiedEmailAddress</span>
 
-<span class="c">//-----------------</span>
-<span class="k">val</span> <span class="i">validateAll</span> <span class="o">:</span> (<span class="i">RegisterRepresentation</span> 
-                      <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">RegisterRepresentation</span>, <span class="i">Error</span><span class="o">&gt;</span>)</pre>
+[&lt;<span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="i">NoEquality</span>;<span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="i">NoComparison</span>&gt;]
+<span class="k">type</span> <span class="i">Account</span> <span class="o">=</span>
+    {
+        <span class="i">Email</span> <span class="o">:</span> <span class="i">EmailAddressContactInfo</span>
+        <span class="i">Password</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 13)" onmouseover="showTip(event, 'fs2', 13)" class="i">string</span>
+        <span class="i">Provider</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="i">string</span>
+        <span class="i">Confirmation</span> <span class="o">:</span> <span class="i">ConfirmationInfo</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="i">option</span>
+    }</pre>
 </td>
 </tr>
 </table>
 
-</section>
+<aside class="notes">
+In functional design though, having "dumb data" with transparency is preferred. It is normally fine for the data to be exposed without being encapsulated. The data is immutable, so it can't get "damaged" by a misbehaving function. And it turns out that the focus on transparent data allows for more code that is more flexible and generic.
+
+<p>OO classes shouls have behaviour operating on private state. Just state is a bad design "Anemic domain". In F# data is separated from functions
+</aside></p>
 
 </section>
 
 <section >
+
+<h3>Designing with types</h3>
+
+<blockquote>
+  <p>"It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures" -- Alan Perlis</p>
+</blockquote>
+
+<aside class="notes">
+    OO classes shouls have behaviour operating on private state. Just state is a bad design "Anemic domain". In F# data is separated from functions
+</aside>
+
+</section>
 
 <section >
 
@@ -921,7 +1136,7 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
                     <span class="o">|&gt;</span> <span class="i">EmailAddress</span> <span class="o">|&gt;</span> <span class="i">Unverified</span>
     <span class="i">Password</span> <span class="o">=</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Password</span>
     <span class="i">Provider</span> <span class="o">=</span> <span class="i">registerRepresentation</span><span class="o">.</span><span class="i">Provider</span>
-    <span class="i">Confirmation</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="i">None</span>
+    <span class="i">Confirmation</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 16)" onmouseover="showTip(event, 'fs6', 16)" class="i">None</span>
 }</pre>
 </td>
 </tr>
@@ -929,65 +1144,11 @@ CodeSNR = <strong>5%</strong> (-2%)</li>
 
 </section>
 
-</section>
-
 <section >
 
-<section >
+<h3>Registration use case</h3>
 
-<h3>Designing domain with types</h3>
-
-<table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-</pre>
-</td>
-<td class="snippet"><pre class="fssnip">
-<span class="k">type</span> <span class="i">EmailAddress</span> <span class="o">=</span> <span class="i">EmailAddress</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs2', 11)" onmouseover="showTip(event, 'fs2', 11)" class="i">string</span>
-
-<span class="k">type</span> <span class="i">VerifiedEmailAddress</span> <span class="o">=</span> <span class="i">VerifiedEmail</span> <span class="k">of</span> <span class="i">EmailAddress</span>
-
-<span class="k">type</span> <span class="i">EmailAddressContactInfo</span> <span class="o">=</span>
-    | <span class="i">Unverified</span> <span class="k">of</span> <span class="i">EmailAddress</span>
-    | <span class="i">Verified</span> <span class="k">of</span> <span class="i">VerifiedEmailAddress</span>
-
-[&lt;<span onmouseout="hideTip(event, 'fs7', 12)" onmouseover="showTip(event, 'fs7', 12)" class="i">NoEquality</span>;<span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="i">NoComparison</span>&gt;]
-<span class="k">type</span> <span class="i">Account</span> <span class="o">=</span>
-    {
-        <span class="i">Email</span> <span class="o">:</span> <span class="i">EmailAddressContactInfo</span>
-        <span class="i">Password</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="i">string</span>
-        <span class="i">Provider</span> <span class="o">:</span> <span onmouseout="hideTip(event, 'fs2', 15)" onmouseover="showTip(event, 'fs2', 15)" class="i">string</span>
-        <span class="i">Confirmation</span> <span class="o">:</span> <span class="i">ConfirmationInfo</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="i">option</span>
-    }</pre>
-</td>
-</tr>
-</table>
-
-<aside class="notes">
-In functional design though, having "dumb data" with transparency is preferred. It is normally fine for the data to be exposed without being encapsulated. The data is immutable, so it can't get "damaged" by a misbehaving function. And it turns out that the focus on transparent data allows for more code that is more flexible and generic.
-
-<p>OO classes shouls have behaviour operating on private state. Just state is a bad design "Anemic domain". In F# data is separated from functions
-</aside></p>
-
-</section>
-
-<section >
-
-<h3>Domain logic and types</h3>
+<h4>After step 2</h4>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l">1: </span>
@@ -1000,13 +1161,13 @@ In functional design though, having "dumb data" with transparency is preferred. 
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="i">tryConfirmEmail</span> <span class="i">account</span> <span class="o">=</span>
-    <span class="k">match</span> <span class="i">account</span><span class="o">.</span><span class="i">Provider</span>, <span class="i">account</span><span class="o">.</span><span class="i">Email</span> <span class="k">with</span>
-        | <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>, <span class="i">Unverified</span> <span class="i">e</span> <span class="k">-&gt;</span> 
-            {<span class="i">account</span> <span class="k">with</span> <span class="i">Email</span> <span class="o">=</span> <span class="i">e</span> <span class="o">|&gt;</span> 
-                    <span class="i">VerifiedEmail</span> <span class="o">|&gt;</span> <span class="i">Verified</span>}<span class="o">|&gt;</span> <span class="i">Success</span>
-        | <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>, <span class="i">Verified</span> _ <span class="k">-&gt;</span> <span class="i">account</span> <span class="o">|&gt;</span> <span class="i">Success</span>
-        | _ <span class="k">-&gt;</span> <span class="i">account</span> <span class="o">|&gt;</span> <span class="i">Success</span></pre>
+<span class="k">let</span> <span class="i">useCase</span> <span class="o">=</span> 
+    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+
+<span class="c">//-----------------</span>
+(<span class="i">RegisterRepresentation</span> <span class="k">-&gt;</span>
+    <span class="i">Result</span><span class="o">&lt;</span><span class="i">Account</span>,<span class="i">Domain</span><span class="o">.</span><span class="i">Error</span><span class="o">&gt;</span>)</pre>
 </td>
 </tr>
 </table>
@@ -1015,15 +1176,23 @@ In functional design though, having "dumb data" with transparency is preferred. 
 
 <section >
 
-<h3>Designing with types</h3>
+<h3>Map function</h3>
 
-<blockquote>
-  <p>"It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures" -- Alan Perlis</p>
-</blockquote>
-
-<aside class="notes">
-    OO classes shouls have behaviour operating on private state. Just state is a bad design "Anemic domain". In F# data is separated from functions
-</aside>
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">map</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
+        | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> <span class="i">Success</span>(<span class="i">f</span> <span class="i">s</span>)
+        | <span onmouseout="hideTip(event, 'fs1', 17)" onmouseover="showTip(event, 'fs1', 17)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="i">Failure</span> <span class="i">f</span></pre>
+</td>
+</tr>
+</table>
 
 </section>
 
@@ -1033,7 +1202,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
 
 <section >
 
-<h3>Persisting with Type Providers</h3>
+<h3>Step 3 : Domain logic and types</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -1048,35 +1217,21 @@ In functional design though, having "dumb data" with transparency is preferred. 
 <span class="l">10: </span>
 <span class="l">11: </span>
 <span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
-<span class="l">19: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="i">persistRegistration</span> <span class="o">=</span>
-    <span class="i">tryCatch</span> (<span class="i">tee</span> (<span class="i">save</span> <span class="i">mapRegistration</span>)) 
-            (<span class="k">fun</span> <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">DatabaseError</span>(<span class="i">ex</span><span class="o">.</span><span class="i">Message</span>))
-
-<span class="c">//-----------------</span>
-<span class="k">val</span> <span class="i">persistRegistration</span><span class="o">:</span> (<span class="i">Account</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">Account</span>,<span class="i">Error</span><span class="o">&gt;</span>)
-<span class="c">//-----------------</span>
-
-<span class="c">// convert a dead-end function into a one-track function</span>
-<span class="k">let</span> <span class="i">tee</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="i">ignore</span>
-    <span class="i">x</span>
-
-<span class="c">// convert a one-track function into a switch with exception handling</span>
-<span class="k">let</span> <span class="i">tryCatch</span> <span class="i">f</span> <span class="i">exnHandler</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="k">try</span>
-        <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span class="i">Success</span>
-    <span class="k">with</span>
-    | <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">exnHandler</span> <span class="i">ex</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 18)" onmouseover="showTip(event, 'fs1', 18)" class="i">Failure</span></pre>
+<span class="i">llet</span> <span class="i">tryConfirmEmail</span> <span class="i">account</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="i">account</span><span class="o">.</span><span class="i">Email</span> <span class="k">with</span>
+        | <span class="i">Unverified</span> <span class="i">e</span> <span class="k">when</span> <span class="i">account</span><span class="o">.</span><span class="i">Provider</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span> <span class="k">-&gt;</span> 
+            {<span class="i">account</span> <span class="k">with</span> <span class="i">Email</span> <span class="o">=</span> <span class="i">e</span> 
+                <span class="o">|&gt;</span> <span class="i">VerifiedEmail</span> 
+                <span class="o">|&gt;</span> <span class="i">Verified</span>}
+                <span class="o">|&gt;</span> <span class="i">Success</span>
+        | <span class="i">Unverified</span> _ <span class="k">-&gt;</span> <span class="i">account</span> <span class="o">|&gt;</span> <span class="i">Success</span>
+        | <span class="i">Verified</span> _ <span class="k">-&gt;</span> 
+                <span class="s">&quot;</span><span class="s">Email</span><span class="s"> </span><span class="s">can&#39;t</span><span class="s"> </span><span class="s">be</span><span class="s"> </span><span class="s">verified</span><span class="s"> </span><span class="s">at</span><span class="s"> </span><span class="s">this</span><span class="s"> </span><span class="s">step</span><span class="s">&quot;</span>
+                 <span class="o">|&gt;</span> <span class="i">ValidationError</span>
+                 <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="i">Failure</span></pre>
 </td>
 </tr>
 </table>
@@ -1085,7 +1240,137 @@ In functional design though, having "dumb data" with transparency is preferred. 
 
 <section >
 
-<h3>Persistance mapping</h3>
+<h3>Registration use case</h3>
+
+<h4>After step 3</h4>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+<span class="l">9: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">useCase</span> <span class="o">=</span> 
+    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+
+<span class="c">//-----------------</span>
+(<span class="i">RegisterRepresentation</span> <span class="k">-&gt;</span>
+    <span class="i">Result</span><span class="o">&lt;</span><span class="i">Account</span>,<span class="i">Domain</span><span class="o">.</span><span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Bind function</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">bind</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
+        | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> <span class="i">f</span> <span class="i">s</span>
+        | <span onmouseout="hideTip(event, 'fs1', 20)" onmouseover="showTip(event, 'fs1', 20)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 21)" onmouseover="showTip(event, 'fs1', 21)" class="i">Failure</span> <span class="i">f</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Persisting with Type Providers</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">persistRegistration</span> <span class="o">=</span>
+    <span class="i">tryCatch</span> (<span class="i">tee</span> (<span class="i">save</span> <span class="i">mapRegistration</span>)) 
+            (<span class="k">fun</span> <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">DatabaseError</span>(<span class="i">ex</span><span class="o">.</span><span class="i">Message</span>))
+
+<span class="c">//-----------------</span>
+<span class="k">val</span> <span class="i">persistRegistration</span><span class="o">:</span> (<span class="i">Account</span> <span class="k">-&gt;</span> <span class="i">Result</span><span class="o">&lt;</span><span class="i">Account</span>,<span class="i">Error</span><span class="o">&gt;</span>)</pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Returning a result from dead end</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">tee</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 22)" onmouseover="showTip(event, 'fs10', 22)" class="i">ignore</span>
+    <span class="i">x</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Try catch</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">tryCatch</span> <span class="i">f</span> <span class="i">exnHandler</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="k">try</span>
+        <span class="i">f</span> <span class="i">x</span> <span class="o">|&gt;</span> <span class="i">Success</span>
+    <span class="k">with</span>
+    | <span class="i">ex</span> <span class="k">-&gt;</span> <span class="i">exnHandler</span> <span class="i">ex</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs1', 23)" onmouseover="showTip(event, 'fs1', 23)" class="i">Failure</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Persistance mapping with Type Providers</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -1152,43 +1437,23 @@ In functional design though, having "dumb data" with transparency is preferred. 
 <h3>Compose business use case</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
-<span class="l">16: </span>
-<span class="l">17: </span>
-<span class="l">18: </span>
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="k">let</span> <span class="i">map</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
-        | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> <span class="i">Success</span>(<span class="i">f</span> <span class="i">s</span>)
-        | <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 20)" onmouseover="showTip(event, 'fs1', 20)" class="i">Failure</span> <span class="i">f</span>
-
-<span class="k">let</span> <span class="i">bind</span> <span class="i">f</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="k">match</span> <span class="i">x</span> <span class="k">with</span>
-        | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> <span class="i">f</span> <span class="i">s</span>
-        | <span onmouseout="hideTip(event, 'fs1', 21)" onmouseover="showTip(event, 'fs1', 21)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs1', 22)" onmouseover="showTip(event, 'fs1', 22)" class="i">Failure</span> <span class="i">f</span>
-
 <span class="k">let</span> <span class="i">start</span> <span class="o">=</span>
         <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
         <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
         <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
-        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
         <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+        <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
         <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
         <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">bind</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
 </td>
@@ -1202,21 +1467,42 @@ In functional design though, having "dumb data" with transparency is preferred. 
 <h3>Compose business use case'</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
-<span class="l">15: </span>
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">start</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Bind infix operator</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
@@ -1225,16 +1511,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
 
 <span class="c">// kleisli operator</span>
 <span class="k">let</span> (<span class="o">&gt;</span><span class="o">=&gt;</span>) <span class="i">f1</span> <span class="i">f2</span> <span class="o">=</span> 
-    <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">f1</span> <span class="i">x</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">f2</span>
-
-<span class="k">let</span> <span class="i">start</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
-    <span class="o">&gt;</span><span class="o">&gt;</span> <span class="i">map</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+    <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">f1</span> <span class="i">x</span> <span class="o">&gt;</span><span class="o">&gt;</span><span class="o">=</span> <span class="i">f2</span></pre>
 </td>
 </tr>
 </table>
@@ -1246,20 +1523,41 @@ In functional design though, having "dumb data" with transparency is preferred. 
 <h3>Compose business use case''</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
-<span class="l"> 1: </span>
-<span class="l"> 2: </span>
-<span class="l"> 3: </span>
-<span class="l"> 4: </span>
-<span class="l"> 5: </span>
-<span class="l"> 6: </span>
-<span class="l"> 7: </span>
-<span class="l"> 8: </span>
-<span class="l"> 9: </span>
-<span class="l">10: </span>
-<span class="l">11: </span>
-<span class="l">12: </span>
-<span class="l">13: </span>
-<span class="l">14: </span>
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
+<span class="l">6: </span>
+<span class="l">7: </span>
+<span class="l">8: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+<span class="k">let</span> <span class="i">start</span> <span class="i">x</span> <span class="o">=</span>
+    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
+    <span class="o">&gt;</span><span class="o">!&gt;</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
+    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+<section >
+
+<h3>Map infix operator</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l">1: </span>
+<span class="l">2: </span>
+<span class="l">3: </span>
+<span class="l">4: </span>
+<span class="l">5: </span>
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
@@ -1267,16 +1565,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
       <span class="i">map</span> <span class="i">f</span> <span class="i">m</span>
 
 <span class="k">let</span> (<span class="o">&gt;</span><span class="o">!&gt;</span>) <span class="i">f1</span> <span class="i">f2</span> <span class="o">=</span> 
-    <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">f1</span> <span class="i">x</span> <span class="o">&lt;!&gt;</span> <span class="i">f2</span>
-
-<span class="k">let</span> <span class="i">start</span> <span class="i">x</span> <span class="o">=</span>
-    <span class="i">Validation</span><span class="o">.</span><span class="i">validateAll</span>
-    <span class="o">&gt;</span><span class="o">!&gt;</span> <span class="i">Validation</span><span class="o">.</span><span class="i">normalizeEmail</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">tryConfirmEmail</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">findByEmailRegistration</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">RegistrationService</span><span class="o">.</span><span class="i">setActivationCode</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Database</span><span class="o">.</span><span class="i">persistRegistration</span>
-    <span class="o">&gt;</span><span class="o">=&gt;</span> <span class="i">Notification</span><span class="o">.</span><span class="i">sendActivationEmail</span></pre>
+    <span class="k">fun</span> <span class="i">x</span> <span class="k">-&gt;</span> <span class="i">f1</span> <span class="i">x</span> <span class="o">&lt;!&gt;</span> <span class="i">f2</span></pre>
 </td>
 </tr>
 </table>
@@ -1344,20 +1633,20 @@ In functional design though, having "dumb data" with transparency is preferred. 
 [&lt;<span class="i">HttpPost</span>&gt;]
 [&lt;<span class="i">Route</span>(<span class="s">&quot;</span><span class="s">api</span><span class="s">/</span><span class="s">register</span><span class="s">&quot;</span>)&gt;]
 <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Register</span>(<span class="i">representation</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span>) <span class="o">=</span>
-  <span class="k">let</span> <span class="i">confirmationUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confirmation</span><span class="s">&quot;</span>)
+  <span class="k">let</span> <span class="i">confirmUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confirm</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span>)
   <span class="k">match</span> <span class="i">startProcess</span> <span class="i">representation</span> <span class="k">with</span>
     | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> 
         <span class="k">match</span> <span class="i">s</span><span class="o">.</span><span class="i">Confirmation</span> <span class="k">with</span>
-        | <span onmouseout="hideTip(event, 'fs3', 23)" onmouseover="showTip(event, 'fs3', 23)" class="i">Some</span> <span class="i">c</span> <span class="k">-&gt;</span> 
+        | <span onmouseout="hideTip(event, 'fs3', 24)" onmouseover="showTip(event, 'fs3', 24)" class="i">Some</span> <span class="i">c</span> <span class="k">-&gt;</span> 
             <span class="k">match</span> <span class="i">c</span><span class="o">.</span><span class="i">Activation</span> <span class="k">with</span>
-            | <span onmouseout="hideTip(event, 'fs3', 24)" onmouseover="showTip(event, 'fs3', 24)" class="i">Some</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmationUrl</span>,
+            | <span onmouseout="hideTip(event, 'fs3', 25)" onmouseover="showTip(event, 'fs3', 25)" class="i">Some</span> <span class="i">a</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmUrl</span>,
                         { 
-                            <span class="i">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">s</span>)
+                            <span class="i">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 26)" onmouseover="showTip(event, 'fs11', 26)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">s</span>)
                             <span class="i">Code</span> <span class="o">=</span> <span class="i">a</span><span class="o">.</span><span class="i">ActivationCode</span> 
                         }) <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
-            | <span onmouseout="hideTip(event, 'fs6', 26)" onmouseover="showTip(event, 'fs6', 26)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
-        | <span onmouseout="hideTip(event, 'fs6', 27)" onmouseover="showTip(event, 'fs6', 27)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
-    | <span onmouseout="hideTip(event, 'fs1', 28)" onmouseover="showTip(event, 'fs1', 28)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
+            | <span onmouseout="hideTip(event, 'fs6', 27)" onmouseover="showTip(event, 'fs6', 27)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span onmouseout="hideTip(event, 'fs6', 28)" onmouseover="showTip(event, 'fs6', 28)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+    | <span onmouseout="hideTip(event, 'fs1', 29)" onmouseover="showTip(event, 'fs1', 29)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
         <span class="k">match</span> <span class="i">f</span> <span class="k">with</span>
         | <span class="i">ValidationError</span> <span class="i">ve</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">BadRequest</span>(<span class="i">x</span><span class="o">.</span><span class="i">ModelState</span>) 
                                 <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
@@ -1373,7 +1662,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
 
 <section >
 
-<h3>Handle it'</h3>
+<h3>Handle it with computation expressions</h3>
 
 <table class="pre"><tr><td class="lines"><pre class="fssnip">
 <span class="l"> 1: </span>
@@ -1412,7 +1701,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
 [&lt;<span class="i">HttpPost</span>&gt;]
 [&lt;<span class="i">Route</span>(<span class="s">&quot;</span><span class="s">api</span><span class="s">/</span><span class="s">register</span><span class="s">&quot;</span>)&gt;]
 <span class="k">member</span> <span class="i">x</span><span class="o">.</span><span class="i">Register2</span>(<span class="i">representation</span> <span class="o">:</span> <span class="i">RegisterRepresentation</span>) <span class="o">=</span>
-   <span class="k">let</span> <span class="i">confirmationUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confir</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span>)
+   <span class="k">let</span> <span class="i">confirmUrl</span> <span class="o">=</span> <span class="i">Uri</span>(<span class="i">x</span><span class="o">.</span><span class="i">Request</span><span class="o">.</span><span class="i">RequestUri</span>, <span class="s">&quot;</span><span class="s">/</span><span class="s">confir</span><span class="s">.</span><span class="s">.</span><span class="s">.</span><span class="s">&quot;</span>)
    <span class="k">match</span> <span class="i">startProcess</span> <span class="i">representation</span> <span class="k">with</span>
     | <span class="i">Success</span> <span class="i">s</span> <span class="k">-&gt;</span> 
       <span class="k">let</span> <span class="i">rsp</span> <span class="o">=</span> 
@@ -1422,15 +1711,15 @@ In functional design though, having "dumb data" with transparency is preferred. 
             <span class="k">let!</span> <span class="i">activation</span> <span class="o">=</span> <span class="i">confirmation</span> 
                                 <span class="o">|&gt;</span> (<span class="k">fun</span> <span class="i">c</span> <span class="k">-&gt;</span> <span class="i">c</span><span class="o">.</span><span class="i">Acti</span>)
             <span class="k">let!</span> <span class="i">r</span> <span class="o">=</span> (<span class="i">s</span>, <span class="i">activation</span>) <span class="o">|&gt;</span> (<span class="k">fun</span> (<span class="i">ss</span>, <span class="i">a</span>) <span class="k">-&gt;</span> 
-                    <span onmouseout="hideTip(event, 'fs3', 29)" onmouseover="showTip(event, 'fs3', 29)" class="i">Some</span> (<span class="i">getConf</span> (<span onmouseout="hideTip(event, 'fs11', 30)" onmouseover="showTip(event, 'fs11', 30)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">ss</span>)) <span class="i">a</span>))
+                    <span onmouseout="hideTip(event, 'fs3', 30)" onmouseover="showTip(event, 'fs3', 30)" class="i">Some</span> (<span class="i">getConf</span> (<span onmouseout="hideTip(event, 'fs11', 31)" onmouseover="showTip(event, 'fs11', 31)" class="i">fst</span> (<span class="i">getEmail</span> <span class="i">ss</span>)) <span class="i">a</span>))
             <span class="k">return</span> <span class="i">r</span>
         }
         <span class="k">match</span> <span class="i">rsp</span> <span class="k">with</span>
-        | <span onmouseout="hideTip(event, 'fs3', 31)" onmouseover="showTip(event, 'fs3', 31)" class="i">Some</span> <span class="i">r</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmationUrl</span>, <span class="i">r</span>) 
+        | <span onmouseout="hideTip(event, 'fs3', 32)" onmouseover="showTip(event, 'fs3', 32)" class="i">Some</span> <span class="i">r</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Created</span>(<span class="i">confirmUrl</span>, <span class="i">r</span>) 
                             <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
-        | <span onmouseout="hideTip(event, 'fs6', 32)" onmouseover="showTip(event, 'fs6', 32)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
+        | <span onmouseout="hideTip(event, 'fs6', 33)" onmouseover="showTip(event, 'fs6', 33)" class="i">None</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">Ok</span>() <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
 
-    | <span onmouseout="hideTip(event, 'fs1', 33)" onmouseover="showTip(event, 'fs1', 33)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
+    | <span onmouseout="hideTip(event, 'fs1', 34)" onmouseover="showTip(event, 'fs1', 34)" class="i">Failure</span> <span class="i">f</span> <span class="k">-&gt;</span> 
         <span class="k">match</span> <span class="i">f</span> <span class="k">with</span>
         | <span class="i">ValidationError</span> <span class="i">ve</span> <span class="k">-&gt;</span> <span class="i">x</span><span class="o">.</span><span class="i">BadRequest</span>(<span class="i">x</span><span class="o">.</span><span class="i">ModelState</span>) 
                                 <span class="o">:&gt;</span> <span class="i">IHttpActionResult</span>
@@ -1463,10 +1752,10 @@ In functional design though, having "dumb data" with transparency is preferred. 
 <td class="snippet"><pre class="fssnip">
 <span class="k">type</span> <span class="i">MaybeResBuilder</span>() <span class="o">=</span>
 
-    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Bind</span>(<span class="i">x</span>, <span class="i">f</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 34)" onmouseover="showTip(event, 'fs12', 34)" class="i">Option</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 35)" onmouseover="showTip(event, 'fs13', 35)" class="i">bind</span> <span class="i">f</span> <span class="i">x</span>            
+    <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Bind</span>(<span class="i">x</span>, <span class="i">f</span>) <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 35)" onmouseover="showTip(event, 'fs12', 35)" class="i">Option</span><span class="o">.</span><span onmouseout="hideTip(event, 'fs13', 36)" onmouseover="showTip(event, 'fs13', 36)" class="i">bind</span> <span class="i">f</span> <span class="i">x</span>            
 
     <span class="k">member</span> <span class="i">this</span><span class="o">.</span><span class="i">Return</span>(<span class="i">x</span>) <span class="o">=</span>
-        <span onmouseout="hideTip(event, 'fs3', 36)" onmouseover="showTip(event, 'fs3', 36)" class="i">Some</span> <span class="i">x</span>
+        <span onmouseout="hideTip(event, 'fs3', 37)" onmouseover="showTip(event, 'fs3', 37)" class="i">Some</span> <span class="i">x</span>
 
 <span class="k">let</span> <span class="i">maybeRes</span> <span class="o">=</span> <span class="k">new</span> <span class="i">MaybeResBuilder</span>()</pre>
 </td>
@@ -1478,6 +1767,92 @@ In functional design though, having "dumb data" with transparency is preferred. 
 </section>
 
 <section >
+
+<section >
+
+<h3>Easy testing</h3>
+
+<table class="pre"><tr><td class="lines"><pre class="fssnip">
+<span class="l"> 1: </span>
+<span class="l"> 2: </span>
+<span class="l"> 3: </span>
+<span class="l"> 4: </span>
+<span class="l"> 5: </span>
+<span class="l"> 6: </span>
+<span class="l"> 7: </span>
+<span class="l"> 8: </span>
+<span class="l"> 9: </span>
+<span class="l">10: </span>
+<span class="l">11: </span>
+<span class="l">12: </span>
+<span class="l">13: </span>
+<span class="l">14: </span>
+<span class="l">15: </span>
+<span class="l">16: </span>
+<span class="l">17: </span>
+<span class="l">18: </span>
+<span class="l">19: </span>
+<span class="l">20: </span>
+<span class="l">21: </span>
+<span class="l">22: </span>
+<span class="l">23: </span>
+</pre>
+</td>
+<td class="snippet"><pre class="fssnip">
+[&lt;<span class="i">Fact</span>&gt;]
+<span class="k">let</span> <span class="i">``Post returns &#39;Ok&#39; on valid data and trusted provider``</span>() <span class="o">=</span>
+
+    <span class="k">let</span> <span class="i">start</span> _ <span class="o">=</span> { <span class="i">Account</span><span class="o">.</span><span class="i">Email</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">test</span><span class="s">@</span><span class="s">email</span><span class="s">.</span><span class="s">fr</span><span class="s">&quot;</span> 
+                        <span class="o">|&gt;</span> <span class="i">EmailAddress</span> 
+                        <span class="o">|&gt;</span> <span class="i">VerifiedEmail</span> 
+                        <span class="o">|&gt;</span> <span class="i">Verified</span>
+                    <span class="i">Password</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">pass</span><span class="s">&quot;</span>
+                    <span class="i">Provider</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>
+                    <span class="i">Confirmation</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 38)" onmouseover="showTip(event, 'fs6', 38)" class="i">None</span>} <span class="o">|&gt;</span> <span class="i">Success</span>
+
+    <span class="k">use</span> <span class="i">controller</span> <span class="o">=</span> <span class="k">new</span> <span class="i">RegisterController</span>(<span class="i">start</span>)
+    <span class="i">controller</span><span class="o">.</span><span class="i">Request</span> <span class="o">&lt;-</span> <span class="k">new</span> <span class="i">HttpRequestMessage</span>(<span class="i">HttpMethod</span><span class="o">.</span><span class="i">Post</span>, 
+                            <span class="s">&quot;</span><span class="s">http</span><span class="s">:</span><span class="s">/</span><span class="s">/</span><span class="s">localhost</span><span class="s">/</span><span class="s">api</span><span class="s">/</span><span class="s">register</span><span class="s">&quot;</span>)
+
+    <span class="k">let</span> <span class="i">representation</span> <span class="o">=</span> {<span class="i">Email</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">test</span><span class="s">@</span><span class="s">email</span><span class="s">.</span><span class="s">fr</span><span class="s">&quot;</span>
+                          <span class="i">Password</span> <span class="o">=</span><span class="s">&quot;</span><span class="s">pass</span><span class="s">&quot;</span>
+                          <span class="i">Privacy</span> <span class="o">=</span> <span class="k">true</span>
+                          <span class="i">Provider</span> <span class="o">=</span><span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span>}
+
+    <span class="k">let</span> <span class="i">result</span> <span class="o">:</span> <span class="i">IHttpActionResult</span> <span class="o">=</span> <span class="i">controller</span><span class="o">.</span><span class="i">Register</span> <span class="i">representation</span>
+
+    <span class="i">result</span> <span class="o">|&gt;</span> <span class="i">should</span> <span class="i">be</span> <span class="i">ofExactType</span><span class="o">&lt;</span><span class="i">Results</span><span class="o">.</span><span class="i">OkResult</span><span class="o">&gt;</span></pre>
+</td>
+</tr>
+</table>
+
+</section>
+
+</section>
+
+<section >
+
+<section >
+
+<h3>Immediate feedback</h3>
+
+<p><img src="images/fsharpusecase.jpg" alt="alt text" title="F# use case" /></p>
+
+</section>
+
+<section >
+
+<h3>Observations</h3>
+
+<ul>
+<li>Composition through functions</li>
+<li>Functions are also values</li>
+<li>No state mutation</li>
+<li>Business use case function</li>
+<li>Testable</li>
+</ul>
+
+</section>
 
 <section >
 
@@ -1506,9 +1881,7 @@ CodeSNR = <strong>23%</strong> (+16%)</li>
 
 <section >
 
-<h3>Immediate feedback</h3>
-
-<p>Code organization</p>
+<h3>Code organisation</h3>
 
 <p><img src="images/CSharpRefactoredProj.jpg" alt="alt text" title="Too many implementations and abstractions" />
 <img src="images/FSharpProj.jpg" alt="alt text" title="Easy to understand organisation" /></p>
@@ -1554,7 +1927,9 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 
 <h3>OOP</h3>
 
-<h4>OOP promise REUSE = Big Lie</h4>
+<blockquote>
+  <p>"OOP promise REUSE = Big Lie" -- Rich Hickey</p>
+</blockquote>
 
 <aside class="notes">
     OOP promis REUSE = Big Lie (everything new you need you write a new class) Different classes with same name fields and we can do nothing because of specificity.
