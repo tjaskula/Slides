@@ -85,7 +85,7 @@
 <li><a href="http://www.meetup.com/Functional-Programming-in-F/">F# user group</a></li>
 <li><a href="http://www.meetup.com/DDD-Paris/">Domain Driven Design user group</a></li>
 </ul></li>
-<li>Tweetting <a href="http://twitter.com/tjaskula">@tjaskula</a> and blogging occasionally at <a href="http://jaskula.fr">jaskula.fr</a></li>
+<li>Tweeting <a href="http://twitter.com/tjaskula">@tjaskula</a> and blogging occasionally at <a href="http://jaskula.fr">jaskula.fr</a></li>
 <li>Playing guitar...</li>
 </ul>
 
@@ -237,7 +237,7 @@
 
 <h3>SNR relation to the code</h3>
 
-<p><strong>SIGNAL</strong> = <strong>Information</strong> producing <strong>Business Value</strong><br /><strong>NOISE</strong> = Everything else <strong>impeding</strong> the convey of Information</p>
+<p><strong>SIGNAL</strong> = <strong>Information</strong> producing <strong>Business Value</strong><br /><strong>NOISE</strong> = Everything else <strong>impeding</strong> the transfer of Information</p>
 
 </section>
 
@@ -383,9 +383,9 @@
 <li>All fields are required (email, password, privacy selection, provider)</li>
 <li>Password should match the password policy</li>
 <li>Email address should be unique</li>
-<li>If user from trusted provider then email is automaticaly confirmed</li>
+<li>If user from trusted provider then email is automatically confirmed</li>
 <li>If not, an activation code should be created and sent to the user's email address</li>
-<li>Account is created and password is crypted</li>
+<li>Account is created and password is encrypted</li>
 </ul>
 
 </section>
@@ -1220,7 +1220,7 @@ In functional design though, having "dumb data" with transparency is preferred. 
 </pre>
 </td>
 <td class="snippet"><pre class="fssnip">
-<span class="i">llet</span> <span class="i">tryConfirmEmail</span> <span class="i">account</span> <span class="o">=</span>
+<span class="k">let</span> <span class="i">tryConfirmEmail</span> <span class="i">account</span> <span class="o">=</span>
     <span class="k">match</span> <span class="i">account</span><span class="o">.</span><span class="i">Email</span> <span class="k">with</span>
         | <span class="i">Unverified</span> <span class="i">e</span> <span class="k">when</span> <span class="i">account</span><span class="o">.</span><span class="i">Provider</span> <span class="o">=</span> <span class="s">&quot;</span><span class="s">OAuth</span><span class="s">&quot;</span> <span class="k">-&gt;</span> 
             {<span class="i">account</span> <span class="k">with</span> <span class="i">Email</span> <span class="o">=</span> <span class="i">e</span> 
@@ -1881,10 +1881,10 @@ CodeSNR = <strong>23%</strong> (+16%)</li>
 
 <section >
 
-<h3>Code organisation</h3>
+<h3>Code organization</h3>
 
 <p><img src="images/CSharpRefactoredProj.jpg" alt="alt text" title="Too many implementations and abstractions" />
-<img src="images/FSharpProj.jpg" alt="alt text" title="Easy to understand organisation" /></p>
+<img src="images/FSharpProj.jpg" alt="alt text" title="Easy to understand organization" /></p>
 
 <aside class="notes">
 What's nice about this approach is that, if you are a newcomer to a code base, you always know where to start. The first few files will always be the "bottom layer" of an application and the last few files will always be the "top layer". No folders needed!
@@ -1914,7 +1914,7 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 
 <p>A more functional approach: separating types from functions</p>
 
-<p>AOP: Higher level functions, monads level of abstractions to hide complexisty
+<p>AOP: Higher level functions, monads level of abstractions to hide complexity
 </aside></p>
 
 </section>
@@ -1932,7 +1932,7 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 </blockquote>
 
 <aside class="notes">
-    OOP promis REUSE = Big Lie (everything new you need you write a new class) Different classes with same name fields and we can do nothing because of specificity.
+    OOP promise REUSE = Big Lie (everything new you need you write a new class) Different classes with same name fields and we can do nothing because of specificity.
 </aside>
 
 </section>
@@ -1948,7 +1948,7 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 <ul>
 <li>Shared freely, no one can mess up</li>
 <li>No locks, copy, clone easy to fabricate (testing, simulation)</li>
-<li>Discurage imperative programming</li>
+<li>Discourage imperative programming</li>
 <li>Generic (map, list, sets)</li>
 <li>Best interface</li>
 <li>Can be composed and aggregated</li>
@@ -1974,7 +1974,7 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 
 <h4>Can turn bad easily with OOP...</h4>
 
-<h5>when not very carfeully used...</h5>
+<h5>when not very carefully used...</h5>
 
 </section>
 
@@ -2041,8 +2041,11 @@ What's nice about this approach is that, if you are a newcomer to a code base, y
 <h3>References</h3>
 
 <ul>
+<li>fsharp.org</li>
+<li>#fsharp</li>
 <li><a href="http://fsharpforfunandprofit.com">http://fsharpforfunandprofit.com</a></li>
 <li>MSDN</li>
+<li>@tjaskula</li>
 </ul>
 
 </section>
